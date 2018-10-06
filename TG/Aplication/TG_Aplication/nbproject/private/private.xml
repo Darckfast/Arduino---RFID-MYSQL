@@ -3,12 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/root/TG/Aplication/TG_Aplication/src/app/model/Card.java</file>
-            <file>file:/root/TG/Aplication/TG_Aplication/src/app/control/DAOCadastroUsuario.java</file>
-            <file>file:/root/TG/Aplication/TG_Aplication/src/app/view/Manager.java</file>
-            <file>file:/root/TG/Aplication/TG_Aplication/src/app/view/Logs.java</file>
-            <file>file:/root/TG/Aplication/TG_Aplication/src/app/view/CadastroUsuario.java</file>
-            <file>file:/root/TG/Aplication/TG_Aplication/src/app/view/Menu.java</file>
+            <file>file:/C:/Users/ZnzDarck/Arduino---RFID-MYSQL/TG/Aplication/TG_Aplication/src/app/view/Logs.java</file>
+            <file>file:/C:/Users/ZnzDarck/Arduino---RFID-MYSQL/TG/Aplication/TG_Aplication/src/app/view/Manager.java</file>
+            <file>file:/C:/Users/ZnzDarck/Arduino---RFID-MYSQL/TG/Aplication/TG_Aplication/src/app/view/Menu.java</file>
+            <file>file:/C:/Users/ZnzDarck/Arduino---RFID-MYSQL/TG/Aplication/TG_Aplication/src/app/view/CadastroUsuario.java</file>
         </group>
     </open-files>
 </project-private>
