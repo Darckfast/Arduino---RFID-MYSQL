@@ -37,7 +37,8 @@ public class DaoSala {
     public void insert(Room u) {
         PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("INSERT INTO ROOM (NOME_SALA, STATUS,ACCESS_idACCESS ) VALUES (?,'A',?) ");
+            ps = conn.prepareStatement("INSERT INTO ROOM (NOME_SALA, STATUS,ACCESS_idACCESS ) VALUES ('?','A',?) ");
+            
             ps.setString(1, u.getSala());
             ps.setInt(2, u.getAcesso());
             
