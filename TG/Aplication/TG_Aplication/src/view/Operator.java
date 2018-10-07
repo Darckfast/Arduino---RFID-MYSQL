@@ -52,6 +52,11 @@ public class Operator extends javax.swing.JFrame {
         jScrollPane1.setViewportView(listOperators);
 
         btnOperatorNovo.setText("Novo");
+        btnOperatorNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOperatorNovoActionPerformed(evt);
+            }
+        });
 
         btnOperatorInativar.setText("Inativar");
         btnOperatorInativar.addActionListener(new java.awt.event.ActionListener() {
@@ -61,6 +66,11 @@ public class Operator extends javax.swing.JFrame {
         });
 
         jButton4.setText("Editar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -128,6 +138,41 @@ public class Operator extends javax.swing.JFrame {
 
         // TODO add your handling code here:
     }//GEN-LAST:event_btnOperatorInativarActionPerformed
+
+    private void btnOperatorNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOperatorNovoActionPerformed
+        OperatorEdit oe = new OperatorEdit();
+        super.dispose();
+        oe.setAgr(true);
+        oe.setVisible(true);
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnOperatorNovoActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+          try{ 
+            ResultSet res = daoOperador.getByNome(listOperators.getSelectedValue());
+            while(res.next()){
+                
+                ResultSet resc = daoCartao.getById(res.getLong("CARD_idCARD"));
+                model.Card c = null;
+                while(resc.next()){
+                    c = new model.Card(resc.getString("hash"), resc.getLong("ACCESS_idACCESS"));
+                }
+                model.Operator u = new model.Operator(res.getString("nome"), c.getHash());
+                u.setId(Long.parseLong(res.getString("idUSER")));
+
+                OperatorEdit oe = new OperatorEdit();
+                oe.setDados(u);
+                super.dispose();
+                oe.setAgr(false);
+                oe.setVisible(true);
+            }
+        }catch(SQLException e){
+            System.out.println(e.toString());
+        }
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -5,6 +5,16 @@
  */
 package view;
 
+import control.Conexao;
+import control.DaoAcesso;
+import control.DaoCartao;
+import control.DaoOperador;
+import function.CPF;
+import function.Email;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ZnzDarck
@@ -30,10 +40,10 @@ public class OperatorEdit extends javax.swing.JFrame {
     private void initComponents() {
 
         txtOperatorCard = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
+        txtNome = new javax.swing.JTextField();
+        txtCpf = new javax.swing.JTextField();
+        txtEmail = new javax.swing.JTextField();
+        txtTelefone = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -42,10 +52,18 @@ public class OperatorEdit extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         cbxAccess = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
+        btnCriar = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        txtid = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
-        txtOperatorCard.setEnabled(false);
         txtOperatorCard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtOperatorCardActionPerformed(evt);
@@ -64,62 +82,106 @@ public class OperatorEdit extends javax.swing.JFrame {
 
         jLabel6.setText("* São campos obrigatórios");
 
-        cbxAccess.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel7.setText("Acesso");
+
+        btnCriar.setText("Criar");
+        btnCriar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCriarActionPerformed(evt);
+            }
+        });
+
+        btnSalvar.setText("Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setText("ID");
+
+        txtid.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbxAccess, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtOperatorCard, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(50, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel1)
+                                    .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtOperatorCard, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 44, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(cbxAccess, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnCriar)
+                                    .addComponent(btnSalvar)))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtid, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(13, 13, 13)))
+                .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnCriar, btnSalvar});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(txtid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtOperatorCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addGap(4, 4, 4)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(3, 3, 3)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbxAccess, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addComponent(jLabel6)
-                .addGap(20, 20, 20))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbxAccess, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCriar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(btnSalvar))
+                .addGap(12, 12, 12))
         );
 
         pack();
@@ -128,6 +190,50 @@ public class OperatorEdit extends javax.swing.JFrame {
     private void txtOperatorCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtOperatorCardActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtOperatorCardActionPerformed
+
+    private void btnCriarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarActionPerformed
+        String u = validaCampos();
+        if(u == null){
+            daoOperador.insert(instanciarObjeto(), instanciarObjectoCard());
+            Operator op = new Operator();
+            super.dispose();
+            op.setVisible(true);
+        }else {
+            JOptionPane.showMessageDialog(this,
+                    u,
+                    "Warning",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnCriarActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        conexao = new Conexao("admin","1234");
+        conexao.setDriver("com.mysql.cj.jdbc.Driver");
+        //conexao.conectar();
+        daoOperador = new DaoOperador(conexao.conectar());
+        daoCartao = new DaoCartao(conexao.conectar());
+        daoAcesso = new DaoAcesso(conexao.conectar());
+        try{
+            ResultSet res = daoAcesso.getAll();
+           
+            while(res.next()){
+                cbxAccess.addItem(res.getString("nivel"));
+            }   
+        }catch(SQLException e){
+            System.out.println(e.toString());
+        }
+
+    }//GEN-LAST:event_formWindowOpened
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        model.Operator u =  instanciarObjeto();
+        daoOperador.update(u.getId());
+        daoOperador.insert(u, instanciarObjectoCard());
+        Operator op = new Operator();
+        super.dispose();
+        op.setVisible(true);    }//GEN-LAST:event_btnSalvarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -163,8 +269,85 @@ public class OperatorEdit extends javax.swing.JFrame {
             }
         });
     }
+    private model.Operator instanciarObjeto (){
+        model.Operator u = new model.Operator(txtNome.getText().trim(), txtOperatorCard.getText());
+        if(!txtid.getText().isEmpty()){
+            u.setId(Long.parseLong(txtid.getText()));
+        }
+        if(!(txtCpf.getText().trim()).isEmpty()){
+            u.setCpf(txtCpf.getText());
+        }
+        if(!(txtEmail.getText().trim()).isEmpty()){
+            u.setEmail(txtEmail.getText());
+        }
+        if(!(txtTelefone.getText().trim()).isEmpty()){
+            u.setTelefone(Long.parseLong(txtTelefone.getText()));
+        }
+        return u;        
+    }
+    private model.Card instanciarObjectoCard (){
+        model.Card c = new model.Card(txtOperatorCard.getText(), new Long (cbxAccess.getSelectedIndex() + 1));
+        
+        return c;
+    }
+    private String validaCampos (){
+        String u = null;
+        try{
+            ResultSet res = daoCartao.getByCartao(txtOperatorCard.getText());
 
+            while(res.next()){
+                 throw new SQLException();
+            }
+        }catch(SQLException e){
+            u += " Cartão já está cadastrado com outro operador";
+        }
+        
+        if((txtNome.getText().trim()).isEmpty()){
+            u += "Noma é necessário";
+        }
+        if(!(txtEmail.getText().trim()).isEmpty()){
+            Email email = new Email();
+            if(!(email.validateEmail(txtEmail.getText().trim()))){
+               u += " Email inválido"; 
+            }
+        }
+        if (!(txtCpf.getText().trim()).isEmpty()){
+            CPF cpf = new CPF();
+            if(!(cpf.isCPF(txtCpf.getText().trim()))){
+                u += " CPF inválido";
+            }    
+        }
+        if (!(txtTelefone.getText().trim()).isEmpty()){
+            try{
+                Long.parseLong(txtTelefone.getText().trim());
+            }catch(NumberFormatException e){
+                u += " Apenas números";
+            }
+        }
+        return u;
+    }
+    public void setAgr(Boolean i){
+        if (i){
+            btnCriar.setEnabled(true);
+            btnSalvar.setEnabled(false);
+        }else{
+            btnCriar.setEnabled(false);
+            btnSalvar.setEnabled(true);
+        }
+    }
+    public void setDados (model.Operator u){
+        txtCpf.setText(u.getCpf());
+        txtEmail.setText(u.getEmail());
+        txtNome.setText(u.getNome());
+        txtOperatorCard.setText(u.getCard());
+        if(u.getTelefone() != null){
+            txtTelefone.setText(u.getTelefone().toString());
+        }
+        txtid.setText(u.getId().toString());
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCriar;
+    private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<String> cbxAccess;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -173,10 +356,16 @@ public class OperatorEdit extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JTextField txtCpf;
+    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtOperatorCard;
+    private javax.swing.JTextField txtTelefone;
+    private javax.swing.JTextField txtid;
     // End of variables declaration//GEN-END:variables
+    private Conexao conexao = null;
+    private DaoOperador daoOperador = null;
+    private DaoCartao daoCartao = null;
+    private DaoAcesso daoAcesso = null;
 }
