@@ -14,7 +14,7 @@ import java.util.Objects;
 public class Room {
     private Long id;
     private String sala;
-    private int acesso;
+    private Long acesso;
     private String status;
 
     public String getStatus() {
@@ -25,7 +25,7 @@ public class Room {
         this.status = status;
     }
     
-    public Room(String sala, int acesso) {
+    public Room(String sala, Long acesso) {
         this.sala = sala;
         this.acesso = acesso;
     }
@@ -42,7 +42,7 @@ public class Room {
         return sala;
     }
 
-    public int getAcesso() {
+    public Long getAcesso() {
         return acesso;
     }
 

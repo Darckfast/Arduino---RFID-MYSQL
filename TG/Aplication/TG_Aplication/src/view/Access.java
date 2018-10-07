@@ -5,6 +5,12 @@
  */
 package view;
 
+import control.Conexao;
+import control.DaoAcesso;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.DefaultListModel;
+
 /**
  *
  * @author ZnzDarck
@@ -35,12 +41,12 @@ public class Access extends javax.swing.JFrame {
         btnAccessInativar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        listAccess.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
         });
+
         jScrollPane1.setViewportView(listAccess);
 
         btnAccessNovo.setText("Novo");
@@ -51,6 +57,11 @@ public class Access extends javax.swing.JFrame {
         });
 
         btnAccessInativar.setText("Inativar");
+        btnAccessInativar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAccessInativarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -86,8 +97,36 @@ public class Access extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAccessNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccessNovoActionPerformed
-        // TODO add your handling code here:
+        AccessEdit ae = new AccessEdit();
+        super.dispose();
+        ae.setVisible(true);
+// TODO add your handling code here:
+        
     }//GEN-LAST:event_btnAccessNovoActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        conexao = new Conexao("admin","1234");
+        conexao.setDriver("com.mysql.cj.jdbc.Driver");
+        //conexao.conectar();
+        daoAcesso = new DaoAcesso(conexao.conectar());  
+        atualizaLista();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formWindowOpened
+
+    private void btnAccessInativarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccessInativarActionPerformed
+        try{
+            ResultSet res = daoAcesso.getByAcesso(listAccess.getSelectedValue());
+            while(res.next()){
+                model.Access u = new model.Access(res.getString("nivel"));
+                u.setId(res.getLong("idACCESS"));
+                daoAcesso.update(u);
+                atualizaLista();
+            }
+        }catch(SQLException e){
+            System.out.println(e.toString());
+        }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAccessInativarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -123,11 +162,25 @@ public class Access extends javax.swing.JFrame {
             }
         });
     }
-
+    private void atualizaLista(){
+        try{
+            ResultSet res = daoAcesso.getAll();
+            DefaultListModel<String> temp = new DefaultListModel<>();
+            while(res.next()){
+                temp.addElement(res.getString("nivel"));
+            }
+            listAccess.setModel(temp);
+        }catch(SQLException e){
+            System.out.println(e.toString());
+        }
+    }
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAccessInativar;
     private javax.swing.JButton btnAccessNovo;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> listAccess;
     // End of variables declaration//GEN-END:variables
+    private Conexao conexao = null;
+    private DaoAcesso daoAcesso = null;
 }

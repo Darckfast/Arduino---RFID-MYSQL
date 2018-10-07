@@ -14,9 +14,9 @@ import java.util.Objects;
 public class Card {
     private Long id;
     private String hash;
-    private Access acesso;
+    private Long acesso;
 
-    public Card(String hash, Access acesso) {
+    public Card(String hash, Long acesso) {
         this.hash = hash;
         this.acesso = acesso;
     }
@@ -29,7 +29,11 @@ public class Card {
         return hash;
     }
 
-    public Access getAcesso() {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getAcesso() {
         return acesso;
     }
 

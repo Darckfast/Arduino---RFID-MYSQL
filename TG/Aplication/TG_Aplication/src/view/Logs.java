@@ -5,6 +5,18 @@
  */
 package view;
 
+import control.Conexao;
+import control.DaoCartao;
+import control.DaoLogs;
+import control.DaoOperador;
+import control.DaoSala;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.Vector;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ZnzDarck
@@ -30,22 +42,27 @@ public class Logs extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableLog = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableLog.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tableLog);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -66,6 +83,18 @@ public class Logs extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        conexao = new Conexao("admin","1234");
+        conexao.setDriver("com.mysql.cj.jdbc.Driver");
+        //conexao.conectar();
+        daoLogs = new DaoLogs(conexao.conectar());
+        daoOperador = new DaoOperador(conexao.conectar());
+        daoSala = new DaoSala(conexao.conectar());
+
+        atualizaTable();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -101,9 +130,49 @@ public class Logs extends javax.swing.JFrame {
             }
         });
     }
+    private void atualizaTable(){
+         try{
+            ResultSet res = daoLogs.getAll();
+            
+            tableLog.setModel(buildTableModel(res));
+            
+         }catch(SQLException e){
+            System.out.println(e.toString());
+        }
+    }
+    
+    public static DefaultTableModel buildTableModel(ResultSet rs)
+        throws SQLException {
 
+    ResultSetMetaData metaData = rs.getMetaData();
+
+    // names of columns
+    Vector<String> columnNames = new Vector<String>();
+    int columnCount = metaData.getColumnCount();
+    for (int column = 1; column <= columnCount; column++) {
+        columnNames.add(metaData.getColumnName(column));
+    }
+
+    // data of the table
+    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+    while (rs.next()) {
+        Vector<Object> vector = new Vector<Object>();
+        for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+            vector.add(rs.getObject(columnIndex));
+        }
+        data.add(vector);
+    }
+
+    return new DefaultTableModel(data, columnNames);
+
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tableLog;
     // End of variables declaration//GEN-END:variables
+    private Conexao conexao = null;
+    private DaoLogs daoLogs = null;
+    private DaoSala daoSala = null;
+    private DaoOperador daoOperador = null;
+    private DaoCartao daoCartao = null;
 }

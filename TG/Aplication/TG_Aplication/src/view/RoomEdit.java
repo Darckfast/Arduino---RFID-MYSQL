@@ -63,6 +63,11 @@ public class RoomEdit extends javax.swing.JFrame {
         });
 
         btnSalvar.setText("Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
 
         btnCriar.setText("Criar");
         btnCriar.addActionListener(new java.awt.event.ActionListener() {
@@ -150,6 +155,15 @@ public class RoomEdit extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_formWindowOpened
 
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        model.Room u =  instanciarObjeto();
+        daoSala.update(u);
+        daoSala.insert(u);
+        Room rm = new Room();
+        super.dispose();
+        rm.setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -185,7 +199,7 @@ public class RoomEdit extends javax.swing.JFrame {
         });
     }
     private model.Room instanciarObjeto (){
-        model.Room u = new model.Room(txtRoomEditSala.getText(), cbxRoomAcesso.getSelectedIndex()); 
+        model.Room u = new model.Room(txtRoomEditSala.getText(), new Long (cbxRoomAcesso.getSelectedIndex()) + 1); 
         if(!txtId.getText().isEmpty()){
             u.setId(Long.parseLong(txtId.getText()));
         }
@@ -203,7 +217,7 @@ public class RoomEdit extends javax.swing.JFrame {
     public void setDados(model.Room u){
         txtId.setText(u.getId().toString());
         txtRoomEditSala.setText(u.getSala());
-        cbxRoomAcesso.setSelectedIndex(u.getAcesso());
+        //cbxRoomAcesso.setSelectedItem(u.getAcesso().toString());
     }
     
     public void atualizaAcesso(){

@@ -59,6 +59,11 @@ public class Room extends javax.swing.JFrame {
         });
 
         btnRoomInativar.setText("Inativar");
+        btnRoomInativar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRoomInativarActionPerformed(evt);
+            }
+        });
 
         btnRoomEditar.setText("Editar");
         btnRoomEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -118,11 +123,10 @@ public class Room extends javax.swing.JFrame {
         rm.setVisible(true);    }//GEN-LAST:event_btnRoomNovoActionPerformed
 
     private void btnRoomEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRoomEditarActionPerformed
-        
          try{ 
             ResultSet res = daoSala.getBySala(listRoom.getSelectedValue());
             while(res.next()){
-                model.Room u = new model.Room(res.getString("nome_sala"), res.getInt("ACCESS_idACCESS"));
+                model.Room u = new model.Room(res.getString("nome_sala"), res.getLong("ACCESS_idACCESS"));
                 u.setId(Long.parseLong(res.getString("idROOM")));
                 u.setStatus(res.getString("status"));
                 RoomEdit ue = new RoomEdit();
@@ -134,8 +138,24 @@ public class Room extends javax.swing.JFrame {
         }catch(SQLException e){
             System.out.println(e.toString());
         }
-
     }//GEN-LAST:event_btnRoomEditarActionPerformed
+
+    private void btnRoomInativarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRoomInativarActionPerformed
+        try{
+            ResultSet res = daoSala.getBySala(listRoom.getSelectedValue());
+            while(res.next()){
+                model.Room u = new model.Room(res.getString("nome_sala"), res.getLong("ACCESS_idACCESS"));
+                u.setId(Long.parseLong(res.getString("idROOM")));
+                u.setStatus(res.getString("status"));
+                daoSala.update(u);
+                atualizaLista();    
+            }
+        }catch(SQLException e){
+            System.out.println(e.toString());
+        }
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRoomInativarActionPerformed
 
     /**
      * @param args the command line arguments

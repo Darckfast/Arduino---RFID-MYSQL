@@ -12,5 +12,21 @@ package model;
 public class Access {
     private Long id;
     private String nivel;
-    
+
+    public Access(String nivel) {
+        this.nivel = nivel;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNivel() {
+        return nivel;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 }
