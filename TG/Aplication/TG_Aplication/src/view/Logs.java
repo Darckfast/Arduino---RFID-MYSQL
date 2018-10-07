@@ -89,9 +89,6 @@ public class Logs extends javax.swing.JFrame {
         conexao.setDriver("com.mysql.cj.jdbc.Driver");
         //conexao.conectar();
         daoLogs = new DaoLogs(conexao.conectar());
-        daoOperador = new DaoOperador(conexao.conectar());
-        daoSala = new DaoSala(conexao.conectar());
-
         atualizaTable();
         // TODO add your handling code here:
     }//GEN-LAST:event_formWindowOpened
@@ -172,7 +169,5 @@ public class Logs extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     private Conexao conexao = null;
     private DaoLogs daoLogs = null;
-    private DaoSala daoSala = null;
-    private DaoOperador daoOperador = null;
-    private DaoCartao daoCartao = null;
+
 }

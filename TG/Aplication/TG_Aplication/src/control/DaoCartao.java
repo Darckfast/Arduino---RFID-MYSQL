@@ -50,7 +50,20 @@ public class DaoCartao {
         
         return res;
     }
-    
+    public ResultSet getById(Long u){
+        PreparedStatement ps = null;
+        ResultSet res = null;
+        try {
+            ps = conn.prepareStatement("SELECT * FROM CARD WHERE idCARD = ? ");
+            ps.setLong(1, u);
+            
+            res = ps.executeQuery();
+        } catch (SQLException ex) {
+             System.out.println(ex.toString());   
+        }
+        
+        return res;
+    }
     public void update (Card u){
          PreparedStatement ps = null;
         try {

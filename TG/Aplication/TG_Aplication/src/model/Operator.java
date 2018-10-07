@@ -17,15 +17,27 @@ public class Operator {
     private String nome;
     private String email;
     private Long telefone;
-    private Card card;
+    private String card;
 
-    public Operator(String nome, Card card) {
+    public Operator(String nome, String card) {
         this.nome = nome;
         this.card = card;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getCard() {
+        return card;
     }
 
     public String getCpf() {

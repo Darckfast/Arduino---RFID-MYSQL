@@ -5,6 +5,13 @@
  */
 package view;
 
+import control.Conexao;
+import control.DaoCartao;
+import control.DaoOperador;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.DefaultListModel;
+
 /**
  *
  * @author ZnzDarck
@@ -36,17 +43,22 @@ public class Operator extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        listOperators.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
         });
+
         jScrollPane1.setViewportView(listOperators);
 
         btnOperatorNovo.setText("Novo");
 
         btnOperatorInativar.setText("Inativar");
+        btnOperatorInativar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOperatorInativarActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Editar");
 
@@ -88,6 +100,35 @@ public class Operator extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        conexao = new Conexao("admin","1234");
+        conexao.setDriver("com.mysql.cj.jdbc.Driver");
+        //conexao.conectar();
+        daoOperador = new DaoOperador(conexao.conectar());
+        daoCartao = new DaoCartao(conexao.conectar());
+        atualizaLista();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void btnOperatorInativarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOperatorInativarActionPerformed
+        try{
+            ResultSet res = daoOperador.getByNome(listOperators.getSelectedValue());
+            while(res.next()){
+                ResultSet resC =  daoCartao.getById(res.getLong("CARD_idCARD"));
+                model.Operator u = null;
+                while(resC.next()){
+                    u = new model.Operator(res.getString("nome"), resC.getString("hash"));
+                }
+                u.setId(res.getLong("idUSER"));
+                daoOperador.update(u.getId());
+                atualizaLista();    
+            }
+        }catch(SQLException e){
+            System.out.println(e.toString());
+        }
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnOperatorInativarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -122,7 +163,18 @@ public class Operator extends javax.swing.JFrame {
             }
         });
     }
-
+    private void atualizaLista(){
+        try{
+            ResultSet res = daoOperador.getAll();
+            DefaultListModel<String> temp = new DefaultListModel<>();
+            while(res.next()){
+                temp.addElement(res.getString("nome"));
+            }
+            listOperators.setModel(temp);
+        }catch(SQLException e){
+            System.out.println(e.toString());
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnOperatorInativar;
     private javax.swing.JButton btnOperatorNovo;
@@ -130,4 +182,7 @@ public class Operator extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> listOperators;
     // End of variables declaration//GEN-END:variables
+    private Conexao conexao = null;
+    private DaoOperador daoOperador = null;
+    private DaoCartao daoCartao = null;
 }

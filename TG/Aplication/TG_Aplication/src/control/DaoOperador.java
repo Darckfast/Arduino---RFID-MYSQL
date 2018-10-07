@@ -34,4 +34,43 @@ public class DaoOperador {
         }
         return res;   
     }
+    public ResultSet getAll(){
+        PreparedStatement ps = null;
+        ResultSet res = null;
+        try {
+            ps = conn.prepareStatement("SELECT * FROM OPERATOR WHERE STATUS = 'A' ");
+          
+            res = ps.executeQuery();
+        } catch (SQLException ex) {
+             System.out.println(ex.toString());   
+        }
+        return res;   
+    }
+    
+    public ResultSet getByNome(String u){
+        PreparedStatement ps = null;
+        ResultSet res = null;
+        try {
+            ps = conn.prepareStatement("SELECT * FROM OPERATOR WHERE STATUS = 'A' AND NOME = ? ");
+            ps.setString(1, u);
+            
+            res = ps.executeQuery();
+        } catch (SQLException ex) {
+             System.out.println(ex.toString());   
+        }
+        return res;   
+    }
+    
+    public void update(Long u){
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement("UPDATE OPERATOR SET STATUS = 'I' WHERE IDUSER = ? ");
+            ps.setLong(1, u);
+            
+            ps.execute();
+        } catch (SQLException ex) {
+             System.out.println(ex.toString());   
+        }
+    }
+    
 }
