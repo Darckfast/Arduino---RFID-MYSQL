@@ -11,9 +11,18 @@ import control.DaoCartao;
 import control.DaoOperador;
 import function.CPF;
 import function.Email;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Image;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import jssc.SerialPort;
+import jssc.SerialPortException;
 
 /**
  *
@@ -56,6 +65,7 @@ public class OperatorEdit extends javax.swing.JFrame {
         btnSalvar = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         txtid = new javax.swing.JTextField();
+        btnReload = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -64,6 +74,7 @@ public class OperatorEdit extends javax.swing.JFrame {
             }
         });
 
+        txtOperatorCard.setEnabled(false);
         txtOperatorCard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtOperatorCardActionPerformed(evt);
@@ -102,6 +113,20 @@ public class OperatorEdit extends javax.swing.JFrame {
 
         txtid.setEnabled(false);
 
+        try {
+            btnReload.setPreferredSize(new Dimension(40, 40));
+            Image img = ImageIO.read(getClass().getResource("../icons/Reload.png"));
+            btnReload.setIcon(new ImageIcon(img));
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        btnReload.setText(null);
+        btnReload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReloadActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -111,19 +136,15 @@ public class OperatorEdit extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel1)
-                                    .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtOperatorCard, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 44, Short.MAX_VALUE))
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1)
+                            .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel6)
@@ -132,7 +153,11 @@ public class OperatorEdit extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnCriar)
-                                    .addComponent(btnSalvar)))))
+                                    .addComponent(btnSalvar)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtOperatorCard, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnReload))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel8)
@@ -154,8 +179,10 @@ public class OperatorEdit extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtOperatorCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtOperatorCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReload))
+                .addGap(1, 1, 1)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -224,6 +251,40 @@ public class OperatorEdit extends javax.swing.JFrame {
         }catch(SQLException e){
             System.out.println(e.toString());
         }
+        if(btnCriar.isEnabled()){
+            txtCpf.setEnabled(false);
+            txtEmail.setEnabled(false);
+            txtNome.setEnabled(false);
+            txtTelefone.setEnabled(false);
+            btnCriar.setEnabled(false);
+            
+            SerialPort serialPort = new SerialPort("/dev/ttyACM0");
+            String str = null;
+            try {
+                serialPort.openPort();//Open serial port
+                serialPort.setParams(115200, 
+                        SerialPort.DATABITS_8,
+                        SerialPort.STOPBITS_1,
+                        SerialPort.PARITY_NONE);//Set params.
+                
+                while(true){
+                    str = serialPort.readString();
+                    if(str != null && str.length() > 31) {
+                      break;
+                    }
+                }
+                serialPort.closePort();
+                txtOperatorCard.setText(str);
+                txtCpf.setEnabled(!txtCpf.isEnabled());
+                txtNome.setEnabled(!txtNome.isEnabled());
+                txtTelefone.setEnabled(!txtTelefone.isEnabled());
+                txtEmail.setEnabled(!txtEmail.isEnabled());
+                btnCriar.setEnabled(!btnCriar.isEnabled());
+            }
+            catch (Exception ex) {
+                System.out.println(ex);
+            }
+        } 
 
     }//GEN-LAST:event_formWindowOpened
 
@@ -234,6 +295,44 @@ public class OperatorEdit extends javax.swing.JFrame {
         Operator op = new Operator();
         super.dispose();
         op.setVisible(true);    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void btnReloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReloadActionPerformed
+        txtOperatorCard.setText("");
+        txtCpf.setEnabled(false);
+        txtEmail.setEnabled(false);
+        txtNome.setEnabled(false);
+        txtTelefone.setEnabled(false);
+        btnCriar.setEnabled(false);
+        
+        SerialPort serialPort = new SerialPort("/dev/ttyACM0");
+        String str = null;
+        try {
+            serialPort.openPort();//Open serial port
+            serialPort.setParams(115200, 
+                        SerialPort.DATABITS_8,
+                        SerialPort.STOPBITS_1,
+                        SerialPort.PARITY_NONE);
+            
+            while(true){
+                str = serialPort.readString();
+                if(str != null && str.length() > 31) {
+                    txtOperatorCard.setText(str);
+                    break;
+                }
+            }
+            serialPort.closePort();
+            txtOperatorCard.setText(str);
+            txtCpf.setEnabled(!txtCpf.isEnabled());
+            txtNome.setEnabled(!txtNome.isEnabled());
+            txtTelefone.setEnabled(!txtTelefone.isEnabled());
+            txtEmail.setEnabled(!txtEmail.isEnabled());
+            btnCriar.setEnabled(!btnCriar.isEnabled());
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+    }//GEN-LAST:event_btnReloadActionPerformed
 
     /**
      * @param args the command line arguments
@@ -268,6 +367,7 @@ public class OperatorEdit extends javax.swing.JFrame {
                 new OperatorEdit().setVisible(true);
             }
         });
+                
     }
     private model.Operator instanciarObjeto (){
         model.Operator u = new model.Operator(txtNome.getText().trim(), txtOperatorCard.getText());
@@ -286,19 +386,19 @@ public class OperatorEdit extends javax.swing.JFrame {
         return u;        
     }
     private model.Card instanciarObjectoCard (){
-        model.Card c = new model.Card(txtOperatorCard.getText(), new Long (cbxAccess.getSelectedIndex() + 1));
+        model.Card c = new model.Card(txtOperatorCard.getText().trim(), new Long (cbxAccess.getSelectedIndex() + 1));
         
         return c;
     }
     private String validaCampos (){
         String u = null;
         try{
-            ResultSet res = daoCartao.getByCartao(txtOperatorCard.getText());
-
-            while(res.next()){
-                 throw new SQLException();
+            ResultSet res = daoCartao.getByCartao(txtOperatorCard.getText().trim());
+            if(res.next()){
+                throw new Exception();
             }
-        }catch(SQLException e){
+                
+        }catch(Exception e){
             u += " Cartão já está cadastrado com outro operador";
         }
         
@@ -345,8 +445,18 @@ public class OperatorEdit extends javax.swing.JFrame {
         }
         txtid.setText(u.getId().toString());
     }
+    private ImageIcon createImageIcon(String path, String description) {
+        java.net.URL imgURL = getClass().getResource(path);
+        if (imgURL != null) {
+            return new ImageIcon(imgURL, description);
+        } else {
+            System.err.println("Couldn't find file: " + path);
+            return null;
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCriar;
+    private javax.swing.JButton btnReload;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<String> cbxAccess;
     private javax.swing.JLabel jLabel1;

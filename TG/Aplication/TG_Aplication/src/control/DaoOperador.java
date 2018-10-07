@@ -96,7 +96,7 @@ public class DaoOperador {
             ps = conn.prepareStatement("INSERT INTO CARD (hash, status, ACCESS_idACCESS) VALUES (?,'A',?)");
             ps.setString(1, c.getHash());
             ps.setLong(2, c.getAcesso());
-            
+           
             ps.execute();
             
             ps.clearParameters();
