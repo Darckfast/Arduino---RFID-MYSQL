@@ -76,32 +76,32 @@ public class Menu extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(76, 76, 76)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(btnCards)
                     .addComponent(btnUsers)
                     .addComponent(btnLogs)
                     .addComponent(Operators)
                     .addComponent(btnRoom))
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {Operators, btnCards, btnLogs, btnUsers});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {Operators, btnCards, btnLogs, btnRoom, btnUsers});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(53, 53, 53)
+                .addContainerGap()
                 .addComponent(btnUsers)
-                .addGap(45, 45, 45)
+                .addGap(18, 18, 18)
                 .addComponent(btnCards)
-                .addGap(48, 48, 48)
+                .addGap(18, 18, 18)
                 .addComponent(btnLogs)
-                .addGap(45, 45, 45)
+                .addGap(18, 18, 18)
                 .addComponent(Operators)
                 .addGap(18, 18, 18)
                 .addComponent(btnRoom)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
