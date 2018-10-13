@@ -74,6 +74,7 @@ public class OperatorEdit extends javax.swing.JFrame {
             }
         });
 
+        txtOperatorCard.setEnabled(false);
         txtOperatorCard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtOperatorCardActionPerformed(evt);
@@ -229,7 +230,7 @@ public class OperatorEdit extends javax.swing.JFrame {
 
     private void btnCriarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarActionPerformed
         String u = validaCampos();
-        if(u == null){
+        if(u.isEmpty()){
             daoOperador.insert(instanciarObjeto(), instanciarObjectoCard());
             Operator op = new Operator();
             super.dispose();
@@ -282,26 +283,24 @@ public class OperatorEdit extends javax.swing.JFrame {
         String str = null;
         try {
             serialPort.openPort();//Open serial port
-            serialPort.setParams(115200, 
+            serialPort.setParams(SerialPort.BAUDRATE_115200, 
                         SerialPort.DATABITS_8,
                         SerialPort.STOPBITS_1,
                         SerialPort.PARITY_NONE);
             
-            while(true){
-                str = serialPort.readString();
-                if(str != null && str.length() > 31) {
-                    txtOperatorCard.setText(str);
-                    break;
-                }
-            }
-         
-            serialPort.closePort();
-            txtOperatorCard.setText(str);
+            while(serialPort.readString(2) == null){}
+            
+            serialPort.writeBytes("1".getBytes());
+            str = serialPort.readString(32);
+
+            txtOperatorCard.setText(str.trim());
             txtCpf.setEnabled(!txtCpf.isEnabled());
             txtNome.setEnabled(!txtNome.isEnabled());
             txtTelefone.setEnabled(!txtTelefone.isEnabled());
             txtEmail.setEnabled(!txtEmail.isEnabled());
             btnCriar.setEnabled(!btnCriar.isEnabled());
+            cbxAccess.setEnabled(!cbxAccess.isEnabled());
+            serialPort.closePort();
         }
         catch (SerialPortException ex) {
             System.out.println(ex);
@@ -387,8 +386,18 @@ public class OperatorEdit extends javax.swing.JFrame {
     private String validaCampos (){
         String u = "";
 
-        if(daoCartao.getUnique(Long.parseLong(txtid.getText()), txtOperatorCard.getText())){
-            u += " Cartão já está cadastrado com outro operador";   
+        if(!txtid.getText().isEmpty()){
+            if(daoCartao.getUnique(Long.parseLong(txtid.getText()), txtOperatorCard.getText())){
+                u += "Cartão já está cadastrado com outro operador";   
+            }
+        }else{
+            try{
+                if(daoCartao.getByCartao(txtOperatorCard.getText()).next()){
+                    u += "Cartão já está cadastrado com outro operador";
+                }
+            }catch(Exception e){
+                System.out.println(e);
+            }
         }
         if((txtNome.getText().trim()).isEmpty()){
             u += "Noma é necessário";
