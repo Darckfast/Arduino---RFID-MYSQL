@@ -23,23 +23,30 @@ public class DaoUsuario {
          this.conn = conn;
     }
     
-    public void login(User usuario) {
-        PreparedStatement ps = null;
+    public Boolean login(User usuario) {
+        PreparedStatement ps;
+        ResultSet res;
+        String p;
         try {
-            ps = conn.prepareStatement("SELECT * FROM USER "
-                    + "WHERE LOGIN = ? AND PASSWORD = ?");
+            ps = conn.prepareStatement("SELECT PASSWORD FROM USER "
+                    + "WHERE LOGIN = ? AND STATUS = 'A' ");
             
             ps.setString(1, usuario.getLogin());
-            ps.setString(2, usuario.getPassword());
  
-            ps.execute();
+            res = ps.executeQuery();
+            
+            while(res.next()){
+                p = res.getString("PASSWORD");
+                return p.equals(usuario.getPassword());
+            }
         } catch (SQLException ex) {
              System.out.println(ex.toString());   
         }
+        return false;
     }
     
     public ResultSet getAllUsers (){
-        PreparedStatement ps = null;
+        PreparedStatement ps;
         ResultSet res = null;
         try{
             ps = conn.prepareStatement("SELECT * FROM USER WHERE STATUS = 'A' ");

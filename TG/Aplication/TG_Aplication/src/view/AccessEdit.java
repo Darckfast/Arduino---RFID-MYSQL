@@ -7,6 +7,7 @@ package view;
 
 import control.Conexao;
 import control.DaoAcesso;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -81,20 +82,26 @@ public class AccessEdit extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCriarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarActionPerformed
-        daoAcesso.insert(instanciarObjeto());
-        Access ac = new Access();
-        super.dispose();
-        ac.setVisible(true);
+        String u = validaCampo();
+        
+        if(u.isEmpty()){
+            daoAcesso.insert(instanciarObjeto());
+            Access ac = new Access();
+            super.dispose();
+            ac.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(this,
+                    u,
+                    "Warning",
+                    JOptionPane.WARNING_MESSAGE);
+        }
 // TODO add your handling code here:
     }//GEN-LAST:event_btnCriarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-
         conexao = new Conexao("admin","1234");
         conexao.setDriver("com.mysql.cj.jdbc.Driver");
-        //conexao.conectar();
         daoAcesso = new DaoAcesso(conexao.conectar());
-        // TODO add your handling code here:
     }//GEN-LAST:event_formWindowOpened
 
     /**
@@ -131,7 +138,13 @@ public class AccessEdit extends javax.swing.JFrame {
             }
         });
     }
- 
+    public String validaCampo(){
+        String u = "";
+        if(daoAcesso.getUnique(txtNivel.getText())){
+            u += "Esse nível de acesso já existe";
+        }
+        return u;
+    }
     
     public model.Access instanciarObjeto(){
         model.Access u = new model.Access(txtNivel.getText());   

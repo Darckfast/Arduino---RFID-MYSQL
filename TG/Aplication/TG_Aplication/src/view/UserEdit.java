@@ -7,7 +7,14 @@ package view;
 
 import control.Conexao;
 import control.DaoUsuario;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import model.User;
+import java.security.*;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -34,24 +41,20 @@ public class UserEdit extends javax.swing.JFrame {
     private void initComponents() {
 
         txtUserEditLogin = new javax.swing.JTextField();
-        txtUserEditPass = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnSalvar = new javax.swing.JButton();
         btnCriar = new javax.swing.JButton();
         Id = new javax.swing.JLabel();
         txtid = new javax.swing.JTextField();
+        txtUserEditPass = new javax.swing.JPasswordField();
+        jLabel3 = new javax.swing.JLabel();
+        txtUserEditConPass = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
-            }
-        });
-
-        txtUserEditPass.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtUserEditPassActionPerformed(evt);
             }
         });
 
@@ -77,6 +80,8 @@ public class UserEdit extends javax.swing.JFrame {
 
         txtid.setEnabled(false);
 
+        jLabel3.setText("Confirm Password");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -84,23 +89,24 @@ public class UserEdit extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtUserEditLogin)
-                        .addComponent(txtUserEditPass, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)))
-                .addContainerGap(57, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(154, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 74, Short.MAX_VALUE)
                         .addComponent(btnCriar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnSalvar))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(Id)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtid, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel3)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(Id)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtid, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1)
+                            .addComponent(txtUserEditLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                            .addComponent(txtUserEditPass)
+                            .addComponent(txtUserEditConPass))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -118,7 +124,11 @@ public class UserEdit extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtUserEditPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtUserEditConPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
                     .addComponent(btnCriar))
@@ -128,17 +138,21 @@ public class UserEdit extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtUserEditPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserEditPassActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtUserEditPassActionPerformed
-
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        User u =  instanciarObjeto();
-        daoUsuario.update(u);
-        daoUsuario.insert(u);
-        Users us = new Users();
-        super.dispose();
-        us.setVisible(true);
+        String al = validaCampos();
+        if(al == null){
+            User u =  instanciarObjeto();
+            daoUsuario.update(u);
+            daoUsuario.insert(u);
+            Users us = new Users();
+            super.dispose();
+            us.setVisible(true);            
+        }else{
+         JOptionPane.showMessageDialog(this,
+               al,
+               "Warning",
+               JOptionPane.WARNING_MESSAGE);   
+        }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -148,10 +162,19 @@ public class UserEdit extends javax.swing.JFrame {
         daoUsuario = new DaoUsuario(conexao.conectar());    }//GEN-LAST:event_formWindowOpened
 
     private void btnCriarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarActionPerformed
-        daoUsuario.insert(instanciarObjeto());
-        Users us = new Users();
-        super.dispose();
-        us.setVisible(true);
+        String u = validaCampos();
+        
+        if(u != null){
+            JOptionPane.showMessageDialog(this,
+               u,
+               "Warning",
+               JOptionPane.WARNING_MESSAGE);
+        }else{
+            daoUsuario.insert(instanciarObjeto());
+            Users us = new Users();
+            super.dispose();
+            us.setVisible(true);
+        }
     }//GEN-LAST:event_btnCriarActionPerformed
 
     /**
@@ -190,15 +213,30 @@ public class UserEdit extends javax.swing.JFrame {
     }
     public void setDados(User u){
         txtUserEditLogin.setText(u.getLogin());
-        txtUserEditPass.setText(u.getPassword());
+        //txtUserEditPass.setText(u.getPassword());
         txtid.setText(u.getId().toString());
     }
     private User instanciarObjeto (){
-        User u = new User(txtUserEditLogin.getText(), txtUserEditPass.getText()); 
-        u.setStatus("A");
-        if(!txtid.getText().isEmpty()){
-            u.setId(Long.parseLong(txtid.getText()));
+        
+        byte[] bytesOfMessage;
+        byte[] thedigest = null;
+        MessageDigest md = null;
+        User u = null;
+        try {
+            bytesOfMessage = (Arrays.toString(txtUserEditPass.getPassword())).getBytes("UTF-8");
+            md = MessageDigest.getInstance("MD5");
+            md.update(bytesOfMessage,0,Arrays.toString(txtUserEditPass.getPassword()).length());
+            
+            u = new User(txtUserEditLogin.getText(), new BigInteger(1,md.digest()).toString(16)); 
+            u.setStatus("A");
+   
+            if(!txtid.getText().isEmpty()){
+                u.setId(Long.parseLong(txtid.getText()));
+            }
+        } catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
+            Logger.getLogger(UserEdit.class.getName()).log(Level.SEVERE, null, ex);
         }
+   
         return u;
     }
     public void setAgr(Boolean i){
@@ -210,14 +248,32 @@ public class UserEdit extends javax.swing.JFrame {
             btnSalvar.setEnabled(true);
         }
     }
+    public String validaCampos(){
+        String pass, passCon, u = null;
+        
+        pass = Arrays.toString(txtUserEditPass.getPassword());
+        passCon = Arrays.toString(txtUserEditConPass.getPassword());
+        if(pass.isEmpty() || passCon.isEmpty()){
+            u = "O campo senha não pode ser deixado em branco";
+            return u;
+        }
+        if(!pass.equals(passCon)){
+            u = "Senha são diferentes";
+            return u;
+        }
+
+        return u;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Id;
     private javax.swing.JButton btnCriar;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPasswordField txtUserEditConPass;
     private javax.swing.JTextField txtUserEditLogin;
-    private javax.swing.JTextField txtUserEditPass;
+    private javax.swing.JPasswordField txtUserEditPass;
     private javax.swing.JTextField txtid;
     // End of variables declaration//GEN-END:variables
     private Conexao conexao = null;

@@ -76,4 +76,30 @@ public class DaoCartao {
         }
         
     }
+    
+    public Boolean getUnique(Long c, String u){
+        PreparedStatement ps;
+        ResultSet res;
+        try {
+            ps = conn.prepareStatement("SELECT IDCARD FROM CARD WHERE HASH = ? AND STATUS = 'A'");
+            ps.setString(1, u); 
+            
+            res = ps.executeQuery();
+            if(res.next()){
+                ps = conn.prepareStatement("SELECT IDUSER FROM OPERATOR WHERE CARD_IDCARD = ? ");
+                ps.setLong(1, res.getLong("IDCARD"));
+                res = ps.executeQuery();
+                if(res.next()){
+                    if(res.getLong("IDUSER") == c){
+                        return false;
+                    }
+                }
+                return true;
+            }
+        } catch (SQLException ex) {
+             System.out.println(ex.toString());   
+        }
+        
+        return false;
+    }
 }

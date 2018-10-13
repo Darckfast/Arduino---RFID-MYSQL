@@ -7,6 +7,15 @@ package view;
 
 import control.Conexao;
 import control.DaoUsuario;
+import java.awt.HeadlessException;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import model.User;
 
 /**
@@ -34,8 +43,8 @@ public class Login extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         txtLogin = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        txtSenha = new javax.swing.JTextField();
         txtLogar = new javax.swing.JButton();
+        txtSenha = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -46,9 +55,9 @@ public class Login extends javax.swing.JFrame {
 
         jLabel1.setText("Login");
 
-        jLabel2.setText("Senha");
+        jLabel2.setText("Password");
 
-        txtLogar.setText("Logar");
+        txtLogar.setText("Login");
         txtLogar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtLogarActionPerformed(evt);
@@ -61,14 +70,12 @@ public class Login extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(45, 45, 45)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtSenha)
                     .addComponent(jLabel2)
-                    .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
-                    .addComponent(txtLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(71, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(txtLogar)
                 .addContainerGap())
         );
@@ -83,7 +90,7 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(14, 14, 14)
                 .addComponent(txtLogar)
                 .addContainerGap(8, Short.MAX_VALUE))
         );
@@ -93,11 +100,18 @@ public class Login extends javax.swing.JFrame {
 
     private void txtLogarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLogarActionPerformed
        try{
-           daoUsuario.login(instaciarLogin(usuario));
-           Menu me = new Menu();
-           me.setVisible(true);
-           super.dispose();
-       }catch (Exception e){
+           //if(daoUsuario.login(instaciarLogin(usuario)){
+           if(daoUsuario.login(instaciarLogin(usuario))){
+               Menu me = new Menu();
+               me.setVisible(true);
+               super.dispose();
+           }else{
+           JOptionPane.showMessageDialog(this,
+                "Login inválido",
+                "Warning",
+                JOptionPane.WARNING_MESSAGE);
+           }
+       }catch (HeadlessException | UnsupportedEncodingException e){
            System.out.println(e);
        }
     }//GEN-LAST:event_txtLogarActionPerformed
@@ -143,8 +157,18 @@ public class Login extends javax.swing.JFrame {
             }
         });
     }
-    private User instaciarLogin(User u){
-        u = new User(txtLogin.getText(), txtSenha.getText());
+    private User instaciarLogin(User u) throws UnsupportedEncodingException{
+        byte[] bytesOfMessage;
+        byte[] thedigest = null;
+        MessageDigest md = null;
+        try {
+            bytesOfMessage = (Arrays.toString(txtSenha.getPassword())).getBytes("UTF-8");
+            md = MessageDigest.getInstance("MD5");
+            md.update(bytesOfMessage,0,Arrays.toString(txtSenha.getPassword()).length());
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(UserEdit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        u = new User(txtLogin.getText(), new BigInteger(1,md.digest()).toString(16));
         return u;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -152,7 +176,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JButton txtLogar;
     private javax.swing.JTextField txtLogin;
-    private javax.swing.JTextField txtSenha;
+    private javax.swing.JPasswordField txtSenha;
     // End of variables declaration//GEN-END:variables
     private Conexao conexao = null;
     private DaoUsuario daoUsuario = null;

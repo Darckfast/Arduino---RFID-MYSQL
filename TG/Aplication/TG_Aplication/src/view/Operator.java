@@ -160,9 +160,12 @@ public class Operator extends javax.swing.JFrame {
                 }
                 model.Operator u = new model.Operator(res.getString("nome"), c.getHash());
                 u.setId(Long.parseLong(res.getString("idUSER")));
+                u.setCpf(res.getString("cpf"));
+                u.setEmail(res.getString("email"));
+                u.setTelefone(res.getLong("telefone"));
 
                 OperatorEdit oe = new OperatorEdit();
-                oe.setDados(u);
+                oe.setDados(u,c);
                 super.dispose();
                 oe.setAgr(false);
                 oe.setVisible(true);

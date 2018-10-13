@@ -32,6 +32,7 @@ public class Menu extends javax.swing.JFrame {
         btnUsers = new javax.swing.JButton();
         btnLogs = new javax.swing.JButton();
         Operators = new javax.swing.JButton();
+        btnRoom = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,6 +64,13 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
+        btnRoom.setText("Room");
+        btnRoom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRoomActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -73,7 +81,8 @@ public class Menu extends javax.swing.JFrame {
                     .addComponent(btnCards)
                     .addComponent(btnUsers)
                     .addComponent(btnLogs)
-                    .addComponent(Operators))
+                    .addComponent(Operators)
+                    .addComponent(btnRoom))
                 .addContainerGap(79, Short.MAX_VALUE))
         );
 
@@ -90,7 +99,9 @@ public class Menu extends javax.swing.JFrame {
                 .addComponent(btnLogs)
                 .addGap(45, 45, 45)
                 .addComponent(Operators)
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnRoom)
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         pack();
@@ -115,6 +126,11 @@ public class Menu extends javax.swing.JFrame {
         Operator op = new Operator();
         op.setVisible(true);
     }//GEN-LAST:event_OperatorsActionPerformed
+
+    private void btnRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRoomActionPerformed
+        Room rm = new Room();
+        rm.setVisible(true);
+    }//GEN-LAST:event_btnRoomActionPerformed
 
     /**
      * @param args the command line arguments
@@ -155,6 +171,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton Operators;
     private javax.swing.JButton btnCards;
     private javax.swing.JButton btnLogs;
+    private javax.swing.JButton btnRoom;
     private javax.swing.JButton btnUsers;
     // End of variables declaration//GEN-END:variables
 }

@@ -26,7 +26,7 @@ public class DaoAcesso {
         ResultSet res = null;
         
         try{
-            ps = conn.prepareStatement("SELECT * FROM ACCESS WHERE STATUS = 'A' ");
+            ps = conn.prepareStatement("SELECT * FROM ACCESS WHERE STATUS = 'A' ORDER BY NIVEL");
                     
             res = ps.executeQuery();
         }catch(SQLException e){
@@ -74,5 +74,23 @@ public class DaoAcesso {
             System.out.println(e.toString());
         }
         return res;
+    }
+    
+    public Boolean getUnique(String u){
+        PreparedStatement ps = null;
+        ResultSet res = null;
+        
+        try{
+            ps = conn.prepareStatement("SELECT * FROM ACCESS WHERE NIVEL = ? AND STATUS = 'A' ");
+            ps.setString(1, u);
+            
+            res = ps.executeQuery();
+            if(res.next()){
+               return true;
+            }
+        }catch(SQLException e){
+            System.out.println(e.toString());
+        }
+        return false;
     }
 }
