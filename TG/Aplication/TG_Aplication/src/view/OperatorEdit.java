@@ -11,15 +11,12 @@ import control.DaoCartao;
 import control.DaoOperador;
 import function.CPF;
 import function.Email;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import jssc.SerialPort;
 import jssc.SerialPortException;
@@ -362,10 +359,8 @@ public class OperatorEdit extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new OperatorEdit().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new OperatorEdit().setVisible(true);
         });
                 
     }
@@ -394,35 +389,35 @@ public class OperatorEdit extends javax.swing.JFrame {
 
         if(!txtid.getText().isEmpty()){
             if(daoCartao.getUnique(Long.parseLong(txtid.getText()), txtOperatorCard.getText())){
-                u += "Cartão já está cadastrado com outro operador";   
+                u += "Cartão já está cadastrado com outro operador\n";   
             }
         }else{
             try{
                 if(daoCartao.getByCartao(txtOperatorCard.getText()).next()){
-                    u += "Cartão já está cadastrado com outro operador";
+                    u += "Cartão já está cadastrado com outro operador\n";
                 }
-            }catch(Exception e){
+            }catch(SQLException e){
                 System.out.println(e);
             }
         }
         if((txtNome.getText().trim()).isEmpty()){
-            u += "Noma é necessário";
+            u += "Nome é necessário\n";
         }
         if(!(txtEmail.getText().trim()).isEmpty()){
             Email email = new Email();
             if(!(email.validateEmail(txtEmail.getText().trim()))){
-               u += " Email inválido"; 
+               u += "Email inválido\n"; 
             }
         }
         String cpf = txtCpf.getText().trim().replace("-","").replace(".","");
-        if (!(txtCpf.getText().trim().isEmpty()) && !(CPF.isCPF(cpf))){    
-            u += " CPF inválido";
+        if (!cpf.trim().isEmpty() && !CPF.isCPF(cpf)){    
+            u += "CPF inválido\n";
         }
         if (!(txtTelefone.getText().trim()).isEmpty()){
             try{
                 Long.parseLong(txtTelefone.getText().trim());
             }catch(NumberFormatException e){
-                u += " Apenas números";
+                u += "Apenas números\n";
             }
         }
         return u;
