@@ -40,7 +40,7 @@ public class DaoCartao {
         PreparedStatement ps = null;
         ResultSet res = null;
         try {
-            ps = conn.prepareStatement("SELECT * FROM CARD WHERE HASH = ? ");
+            ps = conn.prepareStatement("SELECT * FROM CARD WHERE HASH = ? AND STATUS = 'A'");
             ps.setString(1, u);
             
             res = ps.executeQuery();
@@ -86,7 +86,7 @@ public class DaoCartao {
             
             res = ps.executeQuery();
             if(res.next()){
-                ps = conn.prepareStatement("SELECT IDUSER FROM OPERATOR WHERE CARD_IDCARD = ? ");
+                ps = conn.prepareStatement("SELECT IDUSER FROM OPERATOR WHERE CARD_IDCARD = ? AND STATUS = 'A' ");
                 ps.setLong(1, res.getLong("IDCARD"));
                 res = ps.executeQuery();
                 if(res.next()){

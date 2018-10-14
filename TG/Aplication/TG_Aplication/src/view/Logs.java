@@ -10,12 +10,15 @@ import control.DaoCartao;
 import control.DaoLogs;
 import control.DaoOperador;
 import control.DaoSala;
+import java.awt.Component;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -132,7 +135,28 @@ public class Logs extends javax.swing.JFrame {
             ResultSet res = daoLogs.getAll();
             
             tableLog.setModel(buildTableModel(res));
+            tableLog.setAutoResizeMode(tableLog.AUTO_RESIZE_ALL_COLUMNS);
             
+            for (int column = 0; column < tableLog.getColumnCount(); column++){
+                TableColumn tableColumn = tableLog.getColumnModel().getColumn(column);
+                int preferredWidth = tableColumn.getMinWidth();
+                int maxWidth = tableColumn.getMaxWidth();
+
+                for (int row = 0; row < tableLog.getRowCount(); row++)
+                {
+                    TableCellRenderer cellRenderer = tableLog.getCellRenderer(row, column);
+                    Component c = tableLog.prepareRenderer(cellRenderer, row, column);
+                    int width = c.getPreferredSize().width + tableLog.getIntercellSpacing().width;
+                    preferredWidth = Math.max(preferredWidth, width);
+
+                    if (preferredWidth >= maxWidth)
+                    {
+                        preferredWidth = maxWidth;
+                        break;
+                    }
+                }
+                tableColumn.setPreferredWidth( preferredWidth );
+            }
          }catch(SQLException e){
             System.out.println(e.toString());
         }

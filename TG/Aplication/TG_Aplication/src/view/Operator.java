@@ -166,6 +166,7 @@ public class Operator extends javax.swing.JFrame {
 
                 OperatorEdit oe = new OperatorEdit();
                 oe.setDados(u,c);
+               
                 super.dispose();
                 oe.setAgr(false);
                 oe.setVisible(true);

@@ -12,23 +12,15 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
 byte mac_addr[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
 void setup() {
-
   Serial.begin(115200);
   while (!Serial); // wait for serial port to connect
 
   SPI.begin();      // Init SPI bus
   mfrc522.PCD_Init();   // Init MFRC522
-  mfrc522.PCD_DumpVersionToSerial();  // Show details of PCD - MFRC522 Card Reader details
-  Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
-
-  Serial.println(F("Aguardando Leitura"));
 }
 
 void loop() {
-  if ( ! mfrc522.PICC_IsNewCardPresent()) {
-    return;
-  }
-  if ( ! mfrc522.PICC_ReadCardSerial()) {
+  if ( ! mfrc522.PICC_IsNewCardPresent() || ! mfrc522.PICC_ReadCardSerial()) {
     return;
   }
   Serial.println(hash());
