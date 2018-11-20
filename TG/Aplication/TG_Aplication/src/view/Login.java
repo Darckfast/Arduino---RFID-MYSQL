@@ -160,7 +160,6 @@ public class Login extends javax.swing.JFrame {
     }
     private User instaciarLogin(User u) throws UnsupportedEncodingException{
         byte[] bytesOfMessage;
-        byte[] thedigest = null;
         MessageDigest md = null;
         try {
             bytesOfMessage = (Arrays.toString(txtSenha.getPassword())).getBytes("UTF-8");
