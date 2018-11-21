@@ -11,19 +11,16 @@ import control.DaoCartao;
 import control.DaoOperador;
 import function.CPF;
 import function.Email;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import jssc.SerialPort;
 import jssc.SerialPortException;
-
+import jssc.SerialPortList;
 /**
  *
  * @author ZnzDarck
@@ -74,7 +71,6 @@ public class OperatorEdit extends javax.swing.JFrame {
             }
         });
 
-        txtOperatorCard.setEnabled(false);
         txtOperatorCard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtOperatorCardActionPerformed(evt);
@@ -265,7 +261,7 @@ public class OperatorEdit extends javax.swing.JFrame {
             txtEmail.setEnabled(false);
             txtNome.setEnabled(false);
             txtTelefone.setEnabled(false);
-            btnCriar.setEnabled(false);
+            //btnCriar.setEnabled(false);
             cbxAccess.setEnabled(false);
         }
     }//GEN-LAST:event_formWindowOpened
@@ -276,36 +272,43 @@ public class OperatorEdit extends javax.swing.JFrame {
         txtEmail.setEnabled(false);
         txtNome.setEnabled(false);
         txtTelefone.setEnabled(false);
-        btnCriar.setEnabled(false);
+        //btnCriar.setEnabled(false);
         cbxAccess.setEnabled(false);
+        SerialPort serialPort;
         
-        SerialPort serialPort = new SerialPort("/dev/ttyACM0");
-        String str = null;
+        String[] portNames = SerialPortList.getPortNames();
+        
+        serialPort = new SerialPort(portNames[0]);
+        
+        String str;
+        
         try {
             serialPort.openPort();//Open serial port
             serialPort.setParams(SerialPort.BAUDRATE_115200, 
                         SerialPort.DATABITS_8,
                         SerialPort.STOPBITS_1,
-                        SerialPort.PARITY_NONE);
-            
-            while(serialPort.readString(2) == null){}
-            
-            serialPort.writeBytes("1".getBytes());
-            str = serialPort.readString(32);
-
-            txtOperatorCard.setText(str.trim());
-            txtCpf.setEnabled(!txtCpf.isEnabled());
-            txtNome.setEnabled(!txtNome.isEnabled());
-            txtTelefone.setEnabled(!txtTelefone.isEnabled());
-            txtEmail.setEnabled(!txtEmail.isEnabled());
-            btnCriar.setEnabled(!btnCriar.isEnabled());
-            cbxAccess.setEnabled(!cbxAccess.isEnabled());
-            serialPort.closePort();
+                        SerialPort.PARITY_NONE);            
+            do{
+                str = serialPort.readString(31);
+            }while(str.trim().length() != 31);
+                if(str.trim().contains("\n")){
+                    JOptionPane.showMessageDialog(this,
+                        "Leitura não foi feita com sucesso",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);    
+                }else{
+                    txtOperatorCard.setText(str.trim());
+                    txtCpf.setEnabled(!txtCpf.isEnabled());
+                    txtNome.setEnabled(!txtNome.isEnabled());
+                    txtTelefone.setEnabled(!txtTelefone.isEnabled());
+                    txtEmail.setEnabled(!txtEmail.isEnabled());
+                    cbxAccess.setEnabled(!cbxAccess.isEnabled());
+                    serialPort.closePort();
+                }
         }
         catch (SerialPortException ex) {
             System.out.println(ex);
         }
-
     }//GEN-LAST:event_btnReloadActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
@@ -356,10 +359,8 @@ public class OperatorEdit extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new OperatorEdit().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new OperatorEdit().setVisible(true);
         });
                 
     }
@@ -388,35 +389,35 @@ public class OperatorEdit extends javax.swing.JFrame {
 
         if(!txtid.getText().isEmpty()){
             if(daoCartao.getUnique(Long.parseLong(txtid.getText()), txtOperatorCard.getText())){
-                u += "Cartão já está cadastrado com outro operador";   
+                u += "Cartão já está cadastrado com outro operador\n";   
             }
         }else{
             try{
                 if(daoCartao.getByCartao(txtOperatorCard.getText()).next()){
-                    u += "Cartão já está cadastrado com outro operador";
+                    u += "Cartão já está cadastrado com outro operador\n";
                 }
-            }catch(Exception e){
+            }catch(SQLException e){
                 System.out.println(e);
             }
         }
         if((txtNome.getText().trim()).isEmpty()){
-            u += "Noma é necessário";
+            u += "Nome é necessário\n";
         }
         if(!(txtEmail.getText().trim()).isEmpty()){
             Email email = new Email();
             if(!(email.validateEmail(txtEmail.getText().trim()))){
-               u += " Email inválido"; 
+               u += "Email inválido\n"; 
             }
         }
         String cpf = txtCpf.getText().trim().replace("-","").replace(".","");
-        if (!(txtCpf.getText().trim().isEmpty()) && !(CPF.isCPF(cpf))){    
-            u += " CPF inválido";
+        if (!cpf.trim().isEmpty() && !CPF.isCPF(cpf)){    
+            u += "CPF inválido\n";
         }
         if (!(txtTelefone.getText().trim()).isEmpty()){
             try{
                 Long.parseLong(txtTelefone.getText().trim());
             }catch(NumberFormatException e){
-                u += " Apenas números";
+                u += "Apenas números\n";
             }
         }
         return u;
@@ -438,7 +439,7 @@ public class OperatorEdit extends javax.swing.JFrame {
         
         //cbxAccess.setSelectedItem(new c.getAcesso().intValue());
         cbxAccess.getModel().setSelectedItem(c.getAcesso());
-        
+        //btnCriar.setEnabled(!btnCriar.isEnabled());
         if(u.getTelefone() != null){
             txtTelefone.setText(u.getTelefone().toString());
         }
@@ -453,6 +454,11 @@ public class OperatorEdit extends javax.swing.JFrame {
             return null;
         }
     }
+    
+    public void setArduino (String a){
+        SerialPort serialPort = new SerialPort(a);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCriar;
     private javax.swing.JButton btnReload;
