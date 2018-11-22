@@ -57,7 +57,7 @@ public class Login extends javax.swing.JFrame {
 
         jLabel2.setText("Password");
 
-        txtLogar.setText("Login");
+        txtLogar.setText("Entrar");
         txtLogar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtLogarActionPerformed(evt);

@@ -32,6 +32,7 @@ public class Menu extends javax.swing.JFrame {
         btnLogs = new javax.swing.JButton();
         Operators = new javax.swing.JButton();
         btnRoom = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -42,7 +43,7 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
-        btnUsers.setText("Users");
+        btnUsers.setText("Usuário");
         btnUsers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUsersActionPerformed(evt);
@@ -56,17 +57,24 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
-        Operators.setText("Operators");
+        Operators.setText("Operadores");
         Operators.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 OperatorsActionPerformed(evt);
             }
         });
 
-        btnRoom.setText("Room");
+        btnRoom.setText("Salas");
         btnRoom.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRoomActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Acesso");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -75,17 +83,18 @@ public class Menu extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(56, 56, 56)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(btnCards)
                     .addComponent(btnUsers)
                     .addComponent(btnLogs)
                     .addComponent(Operators)
-                    .addComponent(btnRoom))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnRoom)
+                    .addComponent(jButton1))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {Operators, btnCards, btnLogs, btnRoom, btnUsers});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {Operators, btnCards, btnLogs, btnRoom, btnUsers, jButton1});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -100,7 +109,9 @@ public class Menu extends javax.swing.JFrame {
                 .addComponent(Operators)
                 .addGap(18, 18, 18)
                 .addComponent(btnRoom)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(30, 30, 30)
+                .addComponent(jButton1)
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         pack();
@@ -130,6 +141,12 @@ public class Menu extends javax.swing.JFrame {
         Room rm = new Room();
         rm.setVisible(true);
     }//GEN-LAST:event_btnRoomActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Access ac = new Access();
+        ac.setVisible(true);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -172,5 +189,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton btnLogs;
     private javax.swing.JButton btnRoom;
     private javax.swing.JButton btnUsers;
+    private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
 }

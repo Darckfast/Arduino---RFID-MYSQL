@@ -71,6 +71,7 @@ public class OperatorEdit extends javax.swing.JFrame {
             }
         });
 
+        txtOperatorCard.setEnabled(false);
         txtOperatorCard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtOperatorCardActionPerformed(evt);
@@ -245,6 +246,7 @@ public class OperatorEdit extends javax.swing.JFrame {
         conexao = new Conexao("admin","1234");
         conexao.setDriver("com.mysql.cj.jdbc.Driver");
         //conexao.conectar();
+        setAgr(false);
         daoOperador = new DaoOperador(conexao.conectar());
         daoCartao = new DaoCartao(conexao.conectar());
         daoAcesso = new DaoAcesso(conexao.conectar());

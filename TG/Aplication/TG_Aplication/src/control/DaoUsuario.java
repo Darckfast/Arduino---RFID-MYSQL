@@ -49,7 +49,7 @@ public class DaoUsuario {
         PreparedStatement ps;
         ResultSet res = null;
         try{
-            ps = conn.prepareStatement("SELECT * FROM USER WHERE STATUS = 'A' ");
+            ps = conn.prepareStatement("SELECT * FROM arduino.USER WHERE STATUS = 'A' ");
   
             res = ps.executeQuery();  
         }catch(SQLException e){
