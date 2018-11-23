@@ -33,6 +33,7 @@ public class Menu extends javax.swing.JFrame {
         Operators = new javax.swing.JButton();
         btnRoom = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        btnRelatorio = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,6 +79,13 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
+        btnRelatorio.setText("Relatório");
+        btnRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRelatorioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -90,11 +98,12 @@ public class Menu extends javax.swing.JFrame {
                     .addComponent(btnLogs)
                     .addComponent(Operators)
                     .addComponent(btnRoom)
-                    .addComponent(jButton1))
-                .addContainerGap(58, Short.MAX_VALUE))
+                    .addComponent(jButton1)
+                    .addComponent(btnRelatorio))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {Operators, btnCards, btnLogs, btnRoom, btnUsers, jButton1});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {Operators, btnCards, btnLogs, btnRelatorio, btnRoom, btnUsers, jButton1});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,9 +118,11 @@ public class Menu extends javax.swing.JFrame {
                 .addComponent(Operators)
                 .addGap(18, 18, 18)
                 .addComponent(btnRoom)
-                .addGap(30, 30, 30)
+                .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnRelatorio)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -147,6 +158,10 @@ public class Menu extends javax.swing.JFrame {
         ac.setVisible(true);
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelatorioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRelatorioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -187,6 +202,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton Operators;
     private javax.swing.JButton btnCards;
     private javax.swing.JButton btnLogs;
+    private javax.swing.JButton btnRelatorio;
     private javax.swing.JButton btnRoom;
     private javax.swing.JButton btnUsers;
     private javax.swing.JButton jButton1;
