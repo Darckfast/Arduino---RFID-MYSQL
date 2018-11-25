@@ -25,10 +25,10 @@ public class DaoLogs {
         PreparedStatement ps = null;
         ResultSet res = null;
         try {
-            ps = conn.prepareStatement("SELECT * FROM LOGS_ACESS");
-
+            ps = conn.prepareStatement("SELECT L.idLOG AS ID, L.hash AS HASH, L.data AS DATA, IFNULL(O.nome, 'DESCONHECIDO') AS OPERADOR, CASE L.granted WHEN 0 THEN 'NÃO GARANTIDO' ELSE 'GARANTIDO' END AS GRANTED, R.nome_sala AS SALA FROM arduino.LOGS_ACESS AS L LEFT JOIN arduino.CARD AS C ON L.CARD_idCARD = C.idCARD INNER JOIN arduino.ROOM AS R ON L.ROOM_idROOM = R.idROOM LEFT JOIN arduino.OPERATOR AS O ON L.OPERATOR_idUSER = O.idUSER ");
+            
             res = ps.executeQuery();
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
              System.out.println(ex.toString());   
         }
         

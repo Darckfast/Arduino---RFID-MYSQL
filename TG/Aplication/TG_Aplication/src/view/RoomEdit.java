@@ -149,10 +149,8 @@ public class RoomEdit extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         conexao = new Conexao("admin","1234");
         conexao.setDriver("com.mysql.cj.jdbc.Driver");
-        //conexao.conectar();
         daoSala = new DaoSala(conexao.conectar()); 
         atualizaAcesso();
-        // TODO add your handling code here:
     }//GEN-LAST:event_formWindowOpened
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
@@ -217,7 +215,7 @@ public class RoomEdit extends javax.swing.JFrame {
     public void setDados(model.Room u){
         txtId.setText(u.getId().toString());
         txtRoomEditSala.setText(u.getSala());
-        //cbxRoomAcesso.setSelectedItem(u.getAcesso().toString());
+        cbxRoomAcesso.setSelectedItem(u.getAcesso().toString());
     }
     
     public void atualizaAcesso(){
@@ -232,6 +230,7 @@ public class RoomEdit extends javax.swing.JFrame {
             System.out.println(e.toString());
         }
     }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCriar;
     private javax.swing.JButton btnSalvar;
@@ -245,5 +244,4 @@ public class RoomEdit extends javax.swing.JFrame {
 
     private Conexao conexao = null;
     private DaoSala daoSala = null;
-        
 }

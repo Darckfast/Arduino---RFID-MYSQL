@@ -158,7 +158,7 @@ public class UserEdit extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         conexao = new Conexao("admin","1234");
         conexao.setDriver("com.mysql.cj.jdbc.Driver");
-        setAgr(false);
+        //setAgr(false);
         //conexao.conectar();
         daoUsuario = new DaoUsuario(conexao.conectar());    }//GEN-LAST:event_formWindowOpened
 

@@ -133,7 +133,7 @@ public class Users extends javax.swing.JFrame {
         //conexao.conectar();
         daoUsuario = new DaoUsuario(conexao.conectar());
         atualizaLista();
-        
+       
     }//GEN-LAST:event_formWindowOpened
 
     private void btnUserInativarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserInativarActionPerformed

@@ -33,8 +33,8 @@ public class Conexao {
 	   if (connection == null){
 	      try {
                  Class.forName(driver).newInstance();
-                 //connection = DriverManager.getConnection("jdbc:mysql://192.168.1.44/arduino?" + "user=admin&password=1234");               
-                 connection = DriverManager.getConnection("jdbc:mysql://localhost/arduino?" + "user=admin&password=1234");               
+                 connection = DriverManager.getConnection("jdbc:mysql://192.168.1.46/arduino?" + "user=admin&password=1234");               
+                 //connection = DriverManager.getConnection("jdbc:mysql://localhost/arduino?" + "user=admin&password=1234");               
 	         System.out.println("Conexao OK");
               } catch (Exception ex) {
                 // handle any errors

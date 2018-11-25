@@ -171,11 +171,11 @@ public class Logs extends javax.swing.JFrame {
     Vector<String> columnNames = new Vector<String>();
     int columnCount = metaData.getColumnCount();
     for (int column = 1; column <= columnCount; column++) {
-        columnNames.add(metaData.getColumnName(column));
+        columnNames.add(metaData.getColumnLabel(column));
     }
 
         // data of the table
-    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+    Vector<Vector<Object>> data = new Vector<>();
     while (rs.next()) {
         Vector<Object> vector = new Vector<Object>();
         for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {

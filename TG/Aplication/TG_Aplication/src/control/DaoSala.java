@@ -37,16 +37,16 @@ public class DaoSala {
     public void insert(Room u) {
         PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("INSERT INTO ROOM (NOME_SALA,  ACCESS_idACCESS, STATUS) VALUES (?,?,'A') ");
+            ps = conn.prepareStatement("INSERT INTO ROOM ( NOME_SALA,  ACCESS_idACCESS, STATUS) VALUES (?,?,'A') ");
             
             ps.setString(1, u.getSala());
             ps.setLong(2, u.getAcesso());
             
             ps.execute();
+            ps.close();
         } catch (SQLException ex) {
              System.out.println(ex.toString());   
         }
-        
     }
     public void update(Room u) {
         PreparedStatement ps = null;
@@ -56,6 +56,7 @@ public class DaoSala {
             ps.setLong(1, u.getId());
           
             ps.execute();
+            ps.close();
         } catch (SQLException ex) {
              System.out.println(ex.toString());   
         }
