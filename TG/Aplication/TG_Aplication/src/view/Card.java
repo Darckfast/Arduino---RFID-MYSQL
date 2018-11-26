@@ -7,10 +7,18 @@ package view;
 
 import control.Conexao;
 import control.DaoCartao;
+import control.DaoLogs;
 import control.DaoSala;
+import java.awt.Component;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Vector;
 import javax.swing.DefaultListModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import static view.Logs.buildTableModel;
 
 /**
  *
@@ -36,9 +44,9 @@ public class Card extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        listCard = new javax.swing.JList<>();
         btnCardInativar = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tableCard = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -47,8 +55,6 @@ public class Card extends javax.swing.JFrame {
             }
         });
 
-        jScrollPane1.setViewportView(listCard);
-
         btnCardInativar.setText("Inativar");
         btnCardInativar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -56,13 +62,26 @@ public class Card extends javax.swing.JFrame {
             }
         });
 
+        tableCard.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane2.setViewportView(tableCard);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCardInativar)
                 .addContainerGap())
@@ -72,11 +91,9 @@ public class Card extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnCardInativar)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCardInativar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -84,7 +101,8 @@ public class Card extends javax.swing.JFrame {
 
     private void btnCardInativarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCardInativarActionPerformed
         try{
-            ResultSet res = daoCartao.getByCartao(listCard.getSelectedValue());
+            ResultSet res = daoCartao.getByCartao(tableCard.getValueAt(tableCard.getSelectedRow(), 0).toString());
+            
             while(res.next()){
                 model.Card u = new model.Card(res.getString("hash"), res.getLong("ACCESS_idACCESS"));
                 u.setId(Long.parseLong(res.getString("idCARD")));
@@ -132,6 +150,9 @@ public class Card extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Card.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -141,23 +162,67 @@ public class Card extends javax.swing.JFrame {
         });
     }
     private void atualizaLista(){
-        try{
+         try{
             ResultSet res = daoCartao.getAll();
-            DefaultListModel<String> temp = new DefaultListModel<>();
             
-            while(res.next()){
-                temp.addElement(res.getString("hash"));
+            tableCard.setModel(buildTableModel(res));
+            tableCard.setAutoResizeMode(tableCard.AUTO_RESIZE_ALL_COLUMNS);
+            
+            for (int column = 0; column < tableCard.getColumnCount(); column++){
+                TableColumn tableColumn = tableCard.getColumnModel().getColumn(column);
+                int preferredWidth = tableColumn.getMinWidth();
+                int maxWidth = tableColumn.getMaxWidth();
+
+                for (int row = 0; row < tableCard.getRowCount(); row++)
+                {
+                    TableCellRenderer cellRenderer = tableCard.getCellRenderer(row, column);
+                    Component c = tableCard.prepareRenderer(cellRenderer, row, column);
+                    int width = c.getPreferredSize().width + tableCard.getIntercellSpacing().width;
+                    preferredWidth = Math.max(preferredWidth, width);
+
+                    if (preferredWidth >= maxWidth)
+                    {
+                        preferredWidth = maxWidth;
+                        break;
+                    }
+                }
+                tableColumn.setPreferredWidth( preferredWidth );
             }
-            
-            listCard.setModel(temp);
-        }catch(SQLException e){
+         }catch(SQLException e){
             System.out.println(e.toString());
         }
     }
+    
+    
+     public static DefaultTableModel buildTableModel(ResultSet rs)
+        throws SQLException {
+
+    ResultSetMetaData metaData = rs.getMetaData();
+
+    // names of columns
+    Vector<String> columnNames = new Vector<String>();
+    int columnCount = metaData.getColumnCount();
+    for (int column = 1; column <= columnCount; column++) {
+        columnNames.add(metaData.getColumnLabel(column));
+    }
+
+        // data of the table
+    Vector<Vector<Object>> data = new Vector<>();
+    while (rs.next()) {
+        Vector<Object> vector = new Vector<Object>();
+        for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+            vector.add(rs.getObject(columnIndex));
+        }
+        data.add(vector);
+    }
+
+    return new DefaultTableModel(data, columnNames);
+
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCardInativar;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JList<String> listCard;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tableCard;
     // End of variables declaration//GEN-END:variables
     private Conexao conexao = null;
     private DaoCartao daoCartao = null;
