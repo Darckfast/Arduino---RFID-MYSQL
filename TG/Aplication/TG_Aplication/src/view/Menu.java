@@ -156,11 +156,11 @@ public class Menu extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Access ac = new Access();
         ac.setVisible(true);
-        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelatorioActionPerformed
-        // TODO add your handling code here:
+        Reports rs = new Reports();
+        rs.setVisible(true);
     }//GEN-LAST:event_btnRelatorioActionPerformed
 
     /**

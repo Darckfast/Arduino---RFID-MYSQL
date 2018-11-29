@@ -26,7 +26,7 @@ public class DaoCartao {
         PreparedStatement ps = null;
         ResultSet res = null;
         try {
-            ps = conn.prepareStatement("SELECT * FROM CARD WHERE STATUS = 'A' ");
+            ps = conn.prepareStatement(" SELECT C.hash AS HASH, O.nome AS NOME FROM CARD AS C LEFT JOIN OPERATOR AS O ON C.idCARD = O.CARD_idCARD WHERE C.STATUS = 'A' ");
 
             res = ps.executeQuery();
         } catch (SQLException ex) {
