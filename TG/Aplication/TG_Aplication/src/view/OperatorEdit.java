@@ -246,7 +246,7 @@ public class OperatorEdit extends javax.swing.JFrame {
         conexao = new Conexao("admin","1234");
         conexao.setDriver("com.mysql.cj.jdbc.Driver");
         //conexao.conectar();
-        setAgr(false);
+        //setAgr(false);
         daoOperador = new DaoOperador(conexao.conectar());
         daoCartao = new DaoCartao(conexao.conectar());
         daoAcesso = new DaoAcesso(conexao.conectar());
@@ -283,16 +283,17 @@ public class OperatorEdit extends javax.swing.JFrame {
         serialPort = new SerialPort(portNames[0]);
         
         String str;
-        
+        int i = 0;
         try {
             serialPort.openPort();//Open serial port
             serialPort.setParams(SerialPort.BAUDRATE_115200, 
-                        SerialPort.DATABITS_8,
+                          SerialPort.DATABITS_8,
                         SerialPort.STOPBITS_1,
                         SerialPort.PARITY_NONE);            
             do{
                 str = serialPort.readString(31);
-            }while(str.trim().length() != 31);
+                i++;
+            }while(str.trim().length() != 31 || i >= 1000);
                 if(str.trim().contains("\n")){
                     JOptionPane.showMessageDialog(this,
                         "Leitura não foi feita com sucesso",
