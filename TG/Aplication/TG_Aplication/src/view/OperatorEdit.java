@@ -13,6 +13,7 @@ import function.CPF;
 import function.Email;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.imageio.ImageIO;
@@ -32,6 +33,8 @@ public class OperatorEdit extends javax.swing.JFrame {
      */
     public OperatorEdit() {
         initComponents();
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Operadores");
     }

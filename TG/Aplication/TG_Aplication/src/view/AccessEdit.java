@@ -7,6 +7,8 @@ package view;
 
 import control.Conexao;
 import control.DaoAcesso;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,6 +22,8 @@ public class AccessEdit extends javax.swing.JFrame {
      */
     public AccessEdit() {
         initComponents();
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
     }
 
     /**

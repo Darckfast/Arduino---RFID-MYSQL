@@ -7,6 +7,8 @@ package view;
 
 import control.Conexao;
 import control.DaoUsuario;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import model.User;
@@ -27,6 +29,8 @@ public class UserEdit extends javax.swing.JFrame {
      */
     public UserEdit() {
         initComponents();
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Usuário");
     }

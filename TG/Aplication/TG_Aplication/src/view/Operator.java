@@ -8,6 +8,8 @@ package view;
 import control.Conexao;
 import control.DaoCartao;
 import control.DaoOperador;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.DefaultListModel;
@@ -23,6 +25,8 @@ public class Operator extends javax.swing.JFrame {
      */
     public Operator() {
         initComponents();
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Operadores");
     }

@@ -8,9 +8,12 @@ package view;
 import control.Conexao;
 import control.DaoLogs;
 import control.DaoSala;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
  
@@ -25,6 +28,10 @@ public class Reports extends javax.swing.JFrame {
      */
     public Reports() {
         initComponents();
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Gerar relatórios");
     }
 
     /**
@@ -123,7 +130,7 @@ public class Reports extends javax.swing.JFrame {
 
     private void btnGerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarActionPerformed
         // TODO add your handling code here   // Compile jrxml file.
-        
+        validaCampos();
     }//GEN-LAST:event_btnGerarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -171,6 +178,29 @@ public class Reports extends javax.swing.JFrame {
         });
     }
 
+    private void validaCampos() { 
+        String dataIni , dataFim, sala;
+        dataFim = dataIni = sala = "";
+        
+        if (!txtDataFim.getText().replaceAll("/", "").isEmpty()) {
+            dataFim = txtDataFim.getText().replaceAll("/", "").trim();
+        }
+        if (!txtDataInicio.getText().isEmpty()) {
+            dataIni = txtDataInicio.getText().replaceAll("/", "").trim();
+        }
+        if (!cbxSalas.getModel().getSelectedItem().toString().isEmpty()) {
+            sala = cbxSalas.getModel().getSelectedItem().toString();
+        }
+        try {
+            ResultSet rs = daoLogs.genReport(dataIni, dataFim, sala);
+
+            while (rs.next()){ 
+                  System.out.println(rs.getString("HASH"));
+            }
+        }catch (Exception e) { 
+            System.out.println(e);
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGerar;
     private javax.swing.JComboBox<String> cbxSalas;
