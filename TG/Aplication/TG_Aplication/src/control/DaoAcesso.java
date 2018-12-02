@@ -15,20 +15,20 @@ import java.sql.SQLException;
  * @author ZnzDarck
  */
 public class DaoAcesso {
-     private Connection conn;
+     private final Connection conn;
     
     public DaoAcesso(Connection conn) {
          this.conn = conn;
     }
     
     public ResultSet getAll(){
-        PreparedStatement ps = null;
+        PreparedStatement ps;
         ResultSet res = null;
         
         try{
             ps = conn.prepareStatement("SELECT * FROM ACCESS WHERE STATUS = 'A' ORDER BY NIVEL");
-                    
-            res = ps.executeQuery();
+                   
+            res = ps.executeQuery();            
         }catch(SQLException e){
             System.out.println(e.toString());
         }
@@ -36,33 +36,35 @@ public class DaoAcesso {
     }
     
     public void insert(model.Access u){
-         PreparedStatement ps = null;
+         PreparedStatement ps;
         
         try{
             ps = conn.prepareStatement("INSERT INTO ACCESS (NIVEL, STATUS) VALUES (?,'A') ");
             ps.setString(1,u.getNivel());
             
             ps.execute();
+            ps.close();
         }catch(SQLException e){
             System.out.println(e.toString());
         }
     }
     
     public void update (model.Access u){
-         PreparedStatement ps = null;
+         PreparedStatement ps;
         
         try{
             ps = conn.prepareStatement("UPDATE ACCESS SET STATUS = 'I' WHERE IDACCESS  =  ?");
             ps.setLong(1,u.getId());
             
             ps.execute();
+            ps.close();
         }catch(SQLException e){
             System.out.println(e.toString());
         }
     }
     
     public ResultSet getByAcesso (String u){
-        PreparedStatement ps = null;
+        PreparedStatement ps;
         ResultSet res = null;
         
         try{
@@ -70,15 +72,15 @@ public class DaoAcesso {
             ps.setString(1, u);
             
             res = ps.executeQuery();
-        }catch(SQLException e){
+       }catch(SQLException e){
             System.out.println(e.toString());
         }
         return res;
     }
     
     public Boolean getUnique(String u){
-        PreparedStatement ps = null;
-        ResultSet res = null;
+        PreparedStatement ps;
+        ResultSet res;
         
         try{
             ps = conn.prepareStatement("SELECT * FROM ACCESS WHERE NIVEL = ? AND STATUS = 'A' ");
@@ -88,6 +90,7 @@ public class DaoAcesso {
             if(res.next()){
                return true;
             }
+            ps.close();
         }catch(SQLException e){
             System.out.println(e.toString());
         }

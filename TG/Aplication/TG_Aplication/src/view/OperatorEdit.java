@@ -71,6 +71,7 @@ public class OperatorEdit extends javax.swing.JFrame {
         jFormattedTextField1.setText("jFormattedTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -266,7 +267,7 @@ public class OperatorEdit extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCriarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("admin","1234");
+        conexao = new Conexao();
         conexao.setDriver("com.mysql.cj.jdbc.Driver");
         //conexao.conectar();
         //setAgr(false);
@@ -297,13 +298,12 @@ public class OperatorEdit extends javax.swing.JFrame {
         txtEmail.setEnabled(false);
         txtNome.setEnabled(false);
         txtTelefone.setEnabled(false);
-        //btnCriar.setEnabled(false);
         cbxAccess.setEnabled(false);
         SerialPort serialPort;
         
         String[] portNames = SerialPortList.getPortNames();
         
-        serialPort = new SerialPort(portNames[0]);
+        serialPort = new SerialPort(portNames[2]);
         
         String str;
         int i = 0;
@@ -479,6 +479,7 @@ public class OperatorEdit extends javax.swing.JFrame {
         }
         txtid.setText(u.getId().toString());
     }
+    
     private ImageIcon createImageIcon(String path, String description) {
         java.net.URL imgURL = getClass().getResource(path);
         if (imgURL != null) {

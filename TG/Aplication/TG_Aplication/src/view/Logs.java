@@ -92,7 +92,7 @@ public class Logs extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("admin","1234");
+        conexao = new Conexao();
         conexao.setDriver("com.mysql.cj.jdbc.Driver");
         //conexao.conectar();
         daoLogs = new DaoLogs(conexao.conectar());

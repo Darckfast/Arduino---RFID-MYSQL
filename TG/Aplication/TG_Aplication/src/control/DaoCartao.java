@@ -16,17 +16,17 @@ import model.Card;
  * @author ZnzDarck
  */
 public class DaoCartao {
-    private Connection conn;
+    private final Connection conn;
     
     public DaoCartao(Connection conn) {
          this.conn = conn;
     }
     
     public ResultSet getAll(){
-        PreparedStatement ps = null;
+        PreparedStatement ps;
         ResultSet res = null;
         try {
-            ps = conn.prepareStatement(" SELECT C.hash AS HASH, O.nome AS NOME FROM CARD AS C LEFT JOIN OPERATOR AS O ON C.idCARD = O.CARD_idCARD WHERE C.STATUS = 'A' ");
+            ps = conn.prepareStatement(" SELECT C.hash AS HASH, O.nome AS NOME , A.nivel AS ACESSO FROM CARD AS C LEFT JOIN OPERATOR AS O ON C.idCARD = O.CARD_idCARD INNER JOIN ACCESS AS A ON C.ACCESS_idACCESS = A.idACCESS WHERE C.STATUS = 'A'; ");
 
             res = ps.executeQuery();
         } catch (SQLException ex) {
@@ -37,7 +37,7 @@ public class DaoCartao {
     }
     
     public ResultSet getByCartao(String u){
-        PreparedStatement ps = null;
+        PreparedStatement ps;
         ResultSet res = null;
         try {
             ps = conn.prepareStatement("SELECT * FROM CARD WHERE HASH = ? AND STATUS = 'A'");
@@ -51,7 +51,7 @@ public class DaoCartao {
         return res;
     }
     public ResultSet getById(Long u){
-        PreparedStatement ps = null;
+        PreparedStatement ps;
         ResultSet res = null;
         try {
             ps = conn.prepareStatement("SELECT * FROM CARD WHERE idCARD = ? ");

@@ -53,6 +53,7 @@ public class Card extends javax.swing.JFrame {
         tableCard = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -120,7 +121,7 @@ public class Card extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCardInativarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("admin","1234");
+        conexao = new Conexao();
         conexao.setDriver("com.mysql.cj.jdbc.Driver");
         //conexao.conectar();
         daoCartao = new DaoCartao(conexao.conectar());
@@ -204,7 +205,7 @@ public class Card extends javax.swing.JFrame {
     ResultSetMetaData metaData = rs.getMetaData();
 
     // names of columns
-    Vector<String> columnNames = new Vector<String>();
+    Vector<String> columnNames = new Vector<>();
     int columnCount = metaData.getColumnCount();
     for (int column = 1; column <= columnCount; column++) {
         columnNames.add(metaData.getColumnLabel(column));
@@ -213,7 +214,7 @@ public class Card extends javax.swing.JFrame {
         // data of the table
     Vector<Vector<Object>> data = new Vector<>();
     while (rs.next()) {
-        Vector<Object> vector = new Vector<Object>();
+        Vector<Object> vector = new Vector<>();
         for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
             vector.add(rs.getObject(columnIndex));
         }

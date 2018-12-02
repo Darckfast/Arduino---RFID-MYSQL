@@ -34,7 +34,7 @@ public class DaoSala {
         return res;
     }
     
-    public void insert(Room u) {
+    public void insert(Room u) throws SQLException{
         PreparedStatement ps = null;
         try {
             ps = conn.prepareStatement("INSERT INTO ROOM ( NOME_SALA,  ACCESS_idACCESS, STATUS) VALUES (?,?,'A') ");
@@ -43,12 +43,14 @@ public class DaoSala {
             ps.setLong(2, u.getAcesso());
             
             ps.execute();
+           
             ps.close();
         } catch (SQLException ex) {
              System.out.println(ex.toString());   
         }
     }
-    public void update(Room u) {
+    
+    public void update(Room u) throws SQLException{
         PreparedStatement ps = null;
         try {
             ps = conn.prepareStatement("UPDATE ROOM SET STATUS = 'I' WHERE IDROOM  =  ? ");
@@ -60,7 +62,6 @@ public class DaoSala {
         } catch (SQLException ex) {
              System.out.println(ex.toString());   
         }
-        
     }
     
     public ResultSet getAccess(){

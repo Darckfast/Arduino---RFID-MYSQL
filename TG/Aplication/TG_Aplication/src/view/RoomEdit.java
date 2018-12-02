@@ -11,8 +11,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultListModel;
 
 /**
  *
@@ -50,6 +48,7 @@ public class RoomEdit extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -151,7 +150,7 @@ public class RoomEdit extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCriarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("admin","1234");
+        conexao = new Conexao();
         conexao.setDriver("com.mysql.cj.jdbc.Driver");
         daoSala = new DaoSala(conexao.conectar()); 
         atualizaAcesso();
@@ -201,7 +200,7 @@ public class RoomEdit extends javax.swing.JFrame {
         });
     }
     private model.Room instanciarObjeto (){
-        model.Room u = new model.Room(txtRoomEditSala.getText(), new Long (cbxRoomAcesso.getSelectedIndex()) + 1); 
+        model.Room u = new model.Room(txtRoomEditSala.getText(), Long.parseLong(cbxRoomAcesso.getModel().getSelectedItem().toString())); 
         if(!txtId.getText().isEmpty()){
             u.setId(Long.parseLong(txtId.getText()));
         }
@@ -219,7 +218,9 @@ public class RoomEdit extends javax.swing.JFrame {
     public void setDados(model.Room u){
         txtId.setText(u.getId().toString());
         txtRoomEditSala.setText(u.getSala());
-        cbxRoomAcesso.setSelectedItem(u.getAcesso().toString());
+        //cbxAccess.getModel().setSelectedItem(c.getAcesso());
+
+        cbxRoomAcesso.getModel().setSelectedItem(u.getAcesso());
     }
     
     public void atualizaAcesso(){

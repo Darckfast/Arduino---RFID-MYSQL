@@ -15,7 +15,7 @@ import java.sql.SQLException;
  * @author ZnzDarck
  */
 public class DaoLogs {
-    private Connection conn;
+    private final Connection conn;
     
     public DaoLogs(Connection conn) {
          this.conn = conn;
@@ -54,7 +54,7 @@ public class DaoLogs {
                 + "INNER JOIN arduino.ROOM AS R "
                 + "ON L.ROOM_idROOM = R.idROOM "
                 + "LEFT JOIN arduino.OPERATOR AS O "
-                + "ON L.OPERATOR_idUSER = O.idUSER ";
+                + "ON L.OPERATOR_idUSER = O.idUSER ORDER BY ID";
         
         if (!dataIni.isEmpty()) {
             filter = filter.concat(String.format(" DATA >= %s ", dataIni));

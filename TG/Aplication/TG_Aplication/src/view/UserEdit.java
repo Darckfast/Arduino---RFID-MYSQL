@@ -56,6 +56,7 @@ public class UserEdit extends javax.swing.JFrame {
         txtUserEditConPass = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -160,7 +161,7 @@ public class UserEdit extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("admin","1234");
+        conexao = new Conexao();
         conexao.setDriver("com.mysql.cj.jdbc.Driver");
         //setAgr(false);
         //conexao.conectar();

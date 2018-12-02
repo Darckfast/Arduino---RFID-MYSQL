@@ -7,7 +7,6 @@ package view;
 
 import control.Conexao;
 import control.DaoSala;
-import control.DaoUsuario;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.sql.ResultSet;
@@ -47,6 +46,7 @@ public class Room extends javax.swing.JFrame {
         btnRoomEditar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -113,7 +113,7 @@ public class Room extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("admin","1234");
+        conexao = new Conexao();
         conexao.setDriver("com.mysql.cj.jdbc.Driver");
         //conexao.conectar();
         daoSala = new DaoSala(conexao.conectar());

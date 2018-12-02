@@ -51,6 +51,7 @@ public class Login extends javax.swing.JFrame {
         txtSenha = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -122,7 +123,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_txtLogarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("admin","1234");
+        conexao = new Conexao();
         conexao.setDriver("com.mysql.cj.jdbc.Driver");
         //conexao.conectar();
         daoUsuario = new DaoUsuario(conexao.conectar());

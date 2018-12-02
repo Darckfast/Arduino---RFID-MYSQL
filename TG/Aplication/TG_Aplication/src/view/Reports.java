@@ -7,15 +7,10 @@ package view;
 
 import control.Conexao;
 import control.DaoLogs;
-import control.DaoSala;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import java.io.File;
-import java.io.IOException;
 import java.sql.ResultSet;
-import java.util.HashMap;
-import java.util.Map;
  
 /**
  *
@@ -53,6 +48,7 @@ public class Reports extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Relatório de acesso");
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -148,7 +144,7 @@ public class Reports extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGerarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("admin","1234");
+        conexao = new Conexao();
         conexao.setDriver("com.mysql.cj.jdbc.Driver");
         daoLogs = new DaoLogs(conexao.conectar());
     }//GEN-LAST:event_formWindowOpened

@@ -17,10 +17,10 @@ import net.sf.jasperreports.view.JasperViewer;
  
 public class JasperReportExemple {
  
-private static final String url = "jdbc:mysql://127.0.0.1/teste";
-private static final String driver = "com.mysql.jdbc.Driver";
-private static final String login = "";
-private static final String pwd = "";
+private static final String URL_STRING = "jdbc:mysql://127.0.0.1/teste";
+private static final String DRIVER_STRING = "com.mysql.jdbc.Driver";
+private static final String LOGIN_STRING = "";
+private static final String PWD_STRING = "";
  
 public JasperReportExemple() {
 }
@@ -33,8 +33,8 @@ JasperDesign desenho = JRXmlLoader.load( layout );
 JasperReport relatorio = JasperCompileManager.compileReport( desenho );
  
 //estabelece conexão
-Class.forName( driver );
-Connection con = DriverManager.getConnection( url , login , pwd );
+Class.forName( DRIVER_STRING );
+Connection con = DriverManager.getConnection( URL_STRING , LOGIN_STRING , PWD_STRING );
 Statement stm = con.createStatement();
 String query = "select * from turma";
 ResultSet rs = stm.executeQuery( query );

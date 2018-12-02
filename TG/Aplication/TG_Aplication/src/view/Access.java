@@ -45,6 +45,7 @@ public class Access extends javax.swing.JFrame {
         btnAccessInativar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -109,7 +110,7 @@ public class Access extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAccessNovoActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("admin","1234");
+        conexao = new Conexao();
         conexao.setDriver("com.mysql.cj.jdbc.Driver");
         //conexao.conectar();
         daoAcesso = new DaoAcesso(conexao.conectar());  

@@ -40,6 +40,7 @@ public class AccessEdit extends javax.swing.JFrame {
         btnCriar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -102,7 +103,7 @@ public class AccessEdit extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCriarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("admin","1234");
+        conexao = new Conexao();
         conexao.setDriver("com.mysql.cj.jdbc.Driver");
         daoAcesso = new DaoAcesso(conexao.conectar());
     }//GEN-LAST:event_formWindowOpened
