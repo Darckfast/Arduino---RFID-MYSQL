@@ -143,7 +143,9 @@ public class RoomEdit extends javax.swing.JFrame {
     }//GEN-LAST:event_cbxRoomAcessoActionPerformed
 
     private void btnCriarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarActionPerformed
-        daoSala.insert(instanciarObjeto());
+        try {
+            daoSala.insert(instanciarObjeto());
+        }catch (SQLException e){}
         Room rm = new Room();
         super.dispose();
         rm.setVisible(true);
@@ -158,8 +160,11 @@ public class RoomEdit extends javax.swing.JFrame {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         model.Room u =  instanciarObjeto();
-        daoSala.update(u);
-        daoSala.insert(u);
+        try { 
+            daoSala.update(u);
+            daoSala.insert(u);
+        }catch (SQLException e){ }
+
         Room rm = new Room();
         super.dispose();
         rm.setVisible(true);        // TODO add your handling code here:

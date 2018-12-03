@@ -13,73 +13,44 @@ import java.util.Objects;
  * @author ZnzDarck
  */
 public class Logs {
-    private Long id;
-    private Operator operator;
-    private Card card;
-    private Date data;
-    private Boolean granted;
+    private int id;
+    private String hash;
+    private String data;
+    private String operador;
+    private String granted;
+    private String sala;
 
-    public Logs(Operator operator, Card card, Date data, Boolean granted) {
-        this.operator = operator;
-        this.card = card;
+    public Logs(int id, String hash, String data, String operador, String granted, String sala) {
+        this.id = id;
+        this.hash = hash;
         this.data = data;
+        this.operador = operador;
         this.granted = granted;
+        this.sala = sala;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public Operator getOperator() {
-        return operator;
-    }
-
-    public Card getCard() {
-        return card;
-    }
-
-    public Date getData() {
-        return data;
-    }
-
-    public Boolean getGranted() {
-        return granted;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
+    public String getHash() {
         return hash;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Logs other = (Logs) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        if (!Objects.equals(this.operator, other.operator)) {
-            return false;
-        }
-        if (!Objects.equals(this.card, other.card)) {
-            return false;
-        }
-        if (!Objects.equals(this.data, other.data)) {
-            return false;
-        }
-        if (!Objects.equals(this.granted, other.granted)) {
-            return false;
-        }
-        return true;
+    public String getData() {
+        return data;
+    }
+
+    public String getOperador() {
+        return operador;
+    }
+
+    public String getGranted() {
+        return granted;
+    }
+
+    public String getSala() {
+        return sala;
     }
     
     

@@ -150,6 +150,7 @@ SELECT * FROM LOGS_ACESS;
 SELECT C.hash AS HASH, O.nome AS NOME FROM CARD AS C LEFT JOIN OPERATOR AS O ON C.idCARD = O.CARD_idCARD WHERE C.STATUS = 'A';
  
 SELECT L.idLOG AS ID, L.hash AS HASH, L.data AS DATA, IFNULL(O.nome, 'DESCONHECIDO') AS OPERADOR, CASE L.granted WHEN 0 THEN 'NÃO GARANTIDO' ELSE 'GARANTIDO' END AS GRANTED, R.nome_sala AS SALA FROM arduino.LOGS_ACESS AS L LEFT JOIN arduino.CARD AS C ON L.CARD_idCARD = C.idCARD INNER JOIN ROOM AS R ON L.ROOM_idROOM = R.idROOM LEFT JOIN OPERATOR AS O ON L.OPERATOR_idUSER = O.idUSER ORDER BY ID;
+
 SELECT * FROM OPERATOR;
 SELECT * FROM ROOM;
 SELECT * FROM arduino.CARD;
@@ -211,12 +212,13 @@ DROP procedure IF EXISTS search_and_grant;
 	DECLARE id INT(4);
     DECLARE nome VARCHAR(500);
 	
-    call FUNC(_hash, (SELECT idROOM FROM ROOM AS R WHERE R.nome_sala = _nome_sala AND STATUS = 'A'));
-
 	SELECT IF(
     (SELECT ACCESS_idACCESS FROM CARD WHERE HASH = _hash AND STATUS = 'A') 
     >= 
     (SELECT ACCESS_idACCESS FROM ROOM AS R WHERE R.nome_sala = _nome_sala AND STATUS = 'A'), 1 , 0) AS ACCESS;
+	
+    call FUNC(_hash, (SELECT idROOM FROM ROOM AS R WHERE R.nome_sala = _nome_sala AND STATUS = 'A'));
+
  END
  $
 
@@ -224,6 +226,12 @@ SELECT * FROM CARD;
 SELECT * FROM ROOM;
  call search_and_grant('574abbbe8a76c77833b471fdaaa6bfb', 'Arduino');
 call func('705f972863f11be38d44d939c1eacc1', 1);
+
+call arduino.search_and_grant('574abbbe8a76c77833b471fdaaa6bfb','Arduino');
+
+SELECT ACCESS_idACCESS FROM ROOM AS R WHERE R.nome_sala = 'Arduino' AND STATUS = 'A';
+
+call arduino.search_and_grant('705f972863f11be38d44d939c1eacc1','Arduino');
 
  INSERT INTO LOGS_ACESS (hash,  ROOM_IDROOM) VALUES (MD5(RAND()), 2);
  SHOW TABLES;
