@@ -7,10 +7,29 @@ package view;
 
 import control.Conexao;
 import control.DaoLogs;
+import control.DaoSala;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  
 /**
  *
@@ -45,6 +64,8 @@ public class Reports extends javax.swing.JFrame {
         btnGerar = new javax.swing.JButton();
         txtDataInicio = new javax.swing.JFormattedTextField();
         txtDataFim = new javax.swing.JFormattedTextField();
+        btnCleanIni = new javax.swing.JButton();
+        btnCleanFim = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Relatório de acesso");
@@ -55,7 +76,6 @@ public class Reports extends javax.swing.JFrame {
             }
         });
 
-        cbxSalas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1" }));
         cbxSalas.setToolTipText("");
         cbxSalas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -77,16 +97,30 @@ public class Reports extends javax.swing.JFrame {
         });
 
         try {
-            txtDataInicio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####/##/##")));
+            txtDataInicio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
 
         try {
-            txtDataFim.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####/##/##")));
+            txtDataFim.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+
+        btnCleanIni.setText("X");
+        btnCleanIni.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCleanIniActionPerformed(evt);
+            }
+        });
+
+        btnCleanFim.setText("X");
+        btnCleanFim.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCleanFimActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -98,22 +132,25 @@ public class Reports extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(cbxSalas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnGerar, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(txtDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(52, 52, 52)
-                                .addComponent(txtDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnCleanIni)
+                                .addGap(45, 45, 45))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel3))
+                            .addComponent(jLabel2)
+                            .addComponent(txtDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCleanFim))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(cbxSalas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2)
-                        .addGap(64, 64, 64))))
+                        .addComponent(btnGerar, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -125,14 +162,16 @@ public class Reports extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(txtDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCleanIni, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCleanFim, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbxSalas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGerar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
@@ -147,11 +186,32 @@ public class Reports extends javax.swing.JFrame {
         conexao = new Conexao();
         conexao.setDriver("com.mysql.cj.jdbc.Driver");
         daoLogs = new DaoLogs(conexao.conectar());
+        daoSala = new DaoSala(conexao.conectar());
+
+        try{
+            ResultSet res = daoSala.getAll();     
+            cbxSalas.addItem("TODAS");
+            cbxSalas.getModel().setSelectedItem("TODAS");
+            while(res.next()){
+                    cbxSalas.addItem(res.getString("nome_sala"));
+            }       
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+        
     }//GEN-LAST:event_formWindowOpened
 
     private void cbxSalasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxSalasActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbxSalasActionPerformed
+
+    private void btnCleanIniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanIniActionPerformed
+        txtDataInicio.setValue(null);
+    }//GEN-LAST:event_btnCleanIniActionPerformed
+
+    private void btnCleanFimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanFimActionPerformed
+        txtDataFim.setValue(null);
+    }//GEN-LAST:event_btnCleanFimActionPerformed
 
     /**
      * @param args the command line arguments
@@ -192,26 +252,164 @@ public class Reports extends javax.swing.JFrame {
         String dataIni , dataFim, sala;
         dataFim = dataIni = sala = "";
         
-        if (!txtDataFim.getText().replaceAll("/", "").isEmpty()) {
-            dataFim = txtDataFim.getText().replaceAll("/", "-").trim();
+        if (!txtDataFim.getText().replaceAll("/", "").trim().isEmpty()) {
+            dataFim = txtDataFim.getText().trim();
         }
-        if (!txtDataInicio.getText().replaceAll("/", "").isEmpty()) {
-            dataIni = txtDataInicio.getText().replaceAll("/", "-").trim();
+        if (!txtDataInicio.getText().replaceAll("/", "").trim().isEmpty()) {
+            dataIni = txtDataInicio.getText().trim();
         }
-        if (!cbxSalas.getModel().getSelectedItem().toString().isEmpty()) {
+        if (!cbxSalas.getModel().getSelectedItem().toString().isEmpty() && !cbxSalas.getModel().getSelectedItem().toString().equals("TODAS")) {
             sala = cbxSalas.getModel().getSelectedItem().toString();
         }
         try {
-            ResultSet rs = daoLogs.genReport(dataIni, dataFim, sala);
-
-            while (rs.next()){ 
-                  System.out.println(rs.getString("HASH"));
+            String msg = genReport(dataIni, dataFim, sala);
+            if (msg.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Não foi possível gerar o relatório",
+                    "Warning",
+                    JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Relatório dispinível em: " + msg,
+                    "Menssagem",
+                    JOptionPane.INFORMATION_MESSAGE);
+                //txtDataFim.setText(" ");
+                txtDataFim.setValue(null);
+                txtDataInicio.setValue(null);
             }
+            
         }catch (Exception e) { 
             System.out.println(e);
         }
     }
+    
+    private String genReport (String dataIni, String dataFim, String sala) {
+        try {
+            Workbook workbook = new XSSFWorkbook();
+        
+            CreationHelper  helper = workbook.getCreationHelper();
+
+            Sheet sheet = workbook.createSheet();
+            XSSFFont headerFont = (XSSFFont) workbook.createFont();
+
+            headerFont.setBold(true);
+
+            CellStyle style = workbook.createCellStyle();
+            style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+            style.setBorderTop(HSSFCellStyle.BORDER_THIN);
+            style.setBorderRight(HSSFCellStyle.BORDER_THIN);
+            style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+
+
+            CellStyle styleHeader = workbook.createCellStyle();
+            styleHeader.setFont(headerFont);
+            styleHeader.setAlignment((short) 2);
+            int b = 0;        
+            Row rowHeader = sheet.createRow(b++);
+
+            rowHeader.createCell(0).setCellValue("RELATÓRIO DE ACESSO");
+            rowHeader.getCell(0).setCellStyle(styleHeader);
+            CellRangeAddress first = new CellRangeAddress(0,0,0,1);
+            sheet.addMergedRegion(first);
+
+            rowHeader = sheet.createRow(b++);
+            rowHeader.createCell(2).setCellValue(String.format("Relátorio de acesso na sala: %s", sala.isEmpty() ? "TODAS" : sala));
+            CellRangeAddress second = new CellRangeAddress(1,1,2,4);
+            sheet.addMergedRegion(second);
+
+            ResultSet rs = daoLogs.genReport(dataIni, dataFim, sala);
+
+            rowHeader = sheet.createRow(b++);
+            rowHeader.createCell(0).setCellValue(
+                    String.format("Relatório de: %s até %s", 
+                            dataIni.isEmpty() ? daoLogs.getFirstDate() :  new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("dd/MM/yyyy").parse(dataIni)), 
+                            dataFim.isEmpty() ? new SimpleDateFormat("dd/MM/yyyy").format(new Date()) : new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("dd/MM/yyyy").parse(dataFim)))
+            );
+            
+            CellRangeAddress third = new CellRangeAddress(2,2,0,1);        
+            sheet.addMergedRegion(third);
+
+            for (int c = sheet.getNumMergedRegions() - 1; c > 0; c--){
+                RegionUtil.setBorderTop(CellStyle.BORDER_MEDIUM, sheet.getMergedRegion(c), sheet, workbook);
+                RegionUtil.setBorderLeft(CellStyle.BORDER_MEDIUM, sheet.getMergedRegion(c), sheet, workbook);
+                RegionUtil.setBorderRight(CellStyle.BORDER_MEDIUM, sheet.getMergedRegion(c), sheet, workbook);
+                RegionUtil.setBorderBottom(CellStyle.BORDER_MEDIUM, sheet.getMergedRegion(c), sheet, workbook);  
+            }
+
+
+            b++;
+            rowHeader = sheet.createRow(b++);
+
+            Cell cell = rowHeader.createCell(0);
+            cell.setCellValue("ID");
+            cell.setCellStyle(style);
+            cell = rowHeader.createCell(1);
+            cell.setCellValue("Cartão");
+            cell.setCellStyle(style);
+            cell = rowHeader.createCell(2);
+            cell.setCellValue("Data");
+            cell.setCellStyle(style);
+            cell = rowHeader.createCell(3);
+            cell.setCellValue("Operador");
+            cell.setCellStyle(style);
+            cell = rowHeader.createCell(4);
+            cell.setCellValue("Garantido");
+            cell.setCellStyle(style);
+            cell = rowHeader.createCell(5);
+            cell.setCellValue("Sala");
+            cell.setCellStyle(style);
+
+            CellStyle dateCellStyle = workbook.createCellStyle();
+            dateCellStyle.setDataFormat(helper.createDataFormat().getFormat("dd-MM-yyyy"));
+
+            while(rs.next()){
+                Row row = sheet.createRow(b++);
+
+                row.createCell(0).setCellValue(rs.getLong("ID"));
+                row.getCell(0).setCellStyle(style);
+                row.createCell(1).setCellValue(rs.getString("HASH"));
+                row.getCell(1).setCellStyle(style);
+               
+                Cell dateCell = row.createCell(2);
+                dateCell.setCellValue(rs.getString("DATA"));
+                dateCell.setCellStyle(dateCellStyle);
+                
+                row.getCell(2).setCellStyle(style);
+                row.createCell(3).setCellValue(rs.getString("OPERADOR"));
+                row.getCell(3).setCellStyle(style);      
+                row.createCell(4).setCellValue(rs.getString("GRANTED").equals("GARANTIDO") ? "SIM" : "NÂO");
+                row.getCell(4).setCellStyle(style);
+                row.createCell(5).setCellValue(rs.getString("SALA"));
+                row.getCell(5).setCellStyle(style);
+            }
+
+            for (int i = rs.getMetaData().getColumnCount(), c = 1; c < i; c++) {
+                sheet.autoSizeColumn(c);
+            }
+
+            try{
+                File file = new File(String.format("./reports/RELATORIO - %s - %s .xlsx", sala.isEmpty() ? "TODAS" : sala , new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date())));
+                FileOutputStream fileOut = new FileOutputStream(file);
+               
+                workbook.write(fileOut);
+                fileOut.close();
+                return file.getAbsolutePath();
+            }catch (IOException e){
+                System.out.println(e);
+            }
+        } catch (Exception e){
+            System.out.println(e);
+        }
+        return "";
+    }
+    
+    public void loadSalas() {
+        
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCleanFim;
+    private javax.swing.JButton btnCleanIni;
     private javax.swing.JButton btnGerar;
     private javax.swing.JComboBox<String> cbxSalas;
     private javax.swing.JLabel jLabel1;
@@ -222,5 +420,5 @@ public class Reports extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     private Conexao conexao = null;
     private DaoLogs daoLogs = null;
-
+    private DaoSala daoSala = null;
 }

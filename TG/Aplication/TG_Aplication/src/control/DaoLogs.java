@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -35,7 +36,7 @@ public class DaoLogs {
         return res;
     }
     
-    public ResultSet genReport(String dataIni, String dataFim, String sala){
+    public ResultSet genReport(String dataIni, String dataFim, String sala) throws Exception{
         PreparedStatement ps = null;
         ResultSet res = null;
         String filter = "";
@@ -54,28 +55,29 @@ public class DaoLogs {
                 + "INNER JOIN arduino.ROOM AS R "
                 + "ON L.ROOM_idROOM = R.idROOM "
                 + "LEFT JOIN arduino.OPERATOR AS O "
-                + "ON L.OPERATOR_idUSER = O.idUSER ORDER BY ID";
+                + "ON L.OPERATOR_idUSER = O.idUSER ";
         
         if (!dataIni.isEmpty()) {
-            filter = filter.concat(String.format(" DATA >= %s ", dataIni));
+            filter = filter.concat(String.format(" DATA >= DATE('%s') ", new SimpleDateFormat("yyyy/MM/dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(dataIni))));
         }
         if (!dataFim.isEmpty()) {
             if (!filter.isEmpty()) {
                 filter = filter.concat(String.format(" AND "));
             }
-            filter = filter.concat(String.format(" DATA <= %s", dataFim));
+            filter = filter.concat(String.format(" DATA <= DATE('%s')", new SimpleDateFormat("yyyy/MM/dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(dataFim))));
         }
         if (!sala.isEmpty()) {
             if (!filter.isEmpty()){ 
                 filter = filter.concat(String.format(" AND "));
             }
-            filter = filter.concat(String.format(" R.nome_sala = %s ", sala));
+            filter = filter.concat(String.format(" R.nome_sala = '%s' ", sala));
         }
   
         try {
             if (!filter.isEmpty()) {
-                statement = statement.concat(String.format(" WHERE %s", filter));
+                statement = statement.concat(String.format(" WHERE %s ", filter));
             }
+            statement = statement.concat(" ORDER BY ID ");
             
             ps = conn.prepareStatement(statement);
             
@@ -85,5 +87,19 @@ public class DaoLogs {
         }
         
         return res;
+    }
+    
+    public String getFirstDate(){
+        PreparedStatement ps;
+        
+        try {
+            ps = conn.prepareStatement(" SELECT DATE_FORMAT(L.data, '%d/%m/%Y') AS DATA FROM arduino.LOGS_ACESS L WHERE idLOG = 1;  ");
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getString("DATA");
+        } catch (SQLException e){
+            System.out.println(e);
+        }
+        return "";
     }
 }

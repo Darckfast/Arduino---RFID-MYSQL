@@ -34,6 +34,7 @@ public class DaoSala {
         return res;
     }
     
+    
     public void insert(Room u) throws SQLException{
         PreparedStatement ps = null;
         try {
